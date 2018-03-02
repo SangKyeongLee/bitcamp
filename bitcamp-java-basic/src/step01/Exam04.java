@@ -23,7 +23,7 @@ public class Exam04 {
         System.out.println(3.14);
 
         // 문자열
-        System.out.println("오호라...");
+        System.out.println("오호라..");
 
         // 한 개의 문자
         System.out.println('가');

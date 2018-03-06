@@ -1,0 +1,56 @@
+package step02.assignment;
+
+public class Test02{
+    public static void main(String[] args) {
+        java.io.InputStream keyboard = System.in;
+        java.util.Scanner keyScan = new java.util.Scanner(keyboard);
+
+        System.out.print("입력? ");
+        String name = keyScan.next();
+        int kor = keyScan.nextInt();
+        int eng = keyScan.nextInt();
+        int math = keyScan.nextInt();
+
+        System.out.print("입력? ");
+        String name2 = keyScan.next();
+        int kor2 = keyScan.nextInt();
+        int eng2 = keyScan.nextInt();
+        int math2 = keyScan.nextInt();
+
+        System.out.print("입력? ");
+        String name3 = keyScan.next();
+        int kor3 = keyScan.nextInt();
+        int eng3 = keyScan.nextInt();
+        int math3 = keyScan.nextInt();
+
+        System.out.print("입력? ");
+        String name4 = keyScan.next();
+        int kor4 = keyScan.nextInt();
+        int eng4 = keyScan.nextInt();
+        int math4 = keyScan.nextInt();
+
+        System.out.print("입력? ");
+        String name5 = keyScan.next();
+        int kor5 = keyScan.nextInt();
+        int eng5 = keyScan.nextInt();
+        int math5 = keyScan.nextInt();
+
+        int sum = kor + eng + math;
+        float avg = sum/3f;
+        int sum2 = kor2 + eng2 + math2;
+        float avg2 = sum2/3f;
+        int sum3 = kor3 + eng3 + math3;
+        float avg3 = sum3/3f;
+        int sum4 = kor4 + eng4 + math4;
+        float avg4 = sum4/3f;
+        int sum5 = kor5 + eng5 + math5;
+        float avg5 = sum5/3f;
+
+        System.out.println("------------------");
+        System.out.println(name +" "+ kor + " " + eng + " " + math + " " + sum + " " + avg);
+        System.out.println(name2 +" "+ kor2 + " " + eng2 + " " + math2 + " " + sum2 + " " + avg2);
+        System.out.println(name3 +" "+ kor3 + " " + eng3 + " " + math3 + " " + sum3 + " " + avg3);
+        System.out.println(name4 +" "+ kor4 + " " + eng4 + " " + math4 + " " + sum4 + " " + avg4);
+        System.out.println(name5 +" "+ kor5 + " " + eng5 + " " + math5 + " " + sum5 + " " + avg5);
+    }
+}

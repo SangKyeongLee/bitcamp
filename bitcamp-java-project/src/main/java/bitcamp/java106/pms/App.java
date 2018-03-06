@@ -6,28 +6,28 @@ public class App {
         java.util.Scanner keyScan = new java.util.Scanner(keyboard);
 
         String teamName;
-        String explain;
-        int member;
-        String str;
-        String end;
+        String description;
+        int maxQty;
+        String startDate;
+        String endDate;
 
         System.out.print("팀명? ");
         teamName = keyScan.nextLine();
         System.out.print("설명? ");
-        explain = keyScan.nextLine();
+        description = keyScan.nextLine();
         System.out.print("최대인원? ");
-        member = keyScan.nextInt();
+        maxQty = keyScan.nextInt();
         keyScan.nextLine();
         System.out.print("시작일? ");
-        str = keyScan.nextLine();
+        startDate = keyScan.nextLine();
         System.out.print("종료일? ");
-        end = keyScan.nextLine();
+        endDate = keyScan.nextLine();
 
         System.out.println("-------------------");
         System.out.println("팀명: " + teamName);
-        System.out.println("설명: \n" + explain);
-        System.out.println("최대인원: " + member + "명");
-        System.out.println("일자: " + str + " ~ " + end);
+        System.out.println("설명: \n" + description);
+        System.out.println("최대인원: " + maxQty + "명");
+        System.out.println("일자: " + startDate + " ~ " + endDate);
 
     }
 }

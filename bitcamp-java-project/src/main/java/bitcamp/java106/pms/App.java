@@ -29,10 +29,12 @@ public class App {
                     continue;
                 }else if(yes.equals("n")){
                     System.out.println("-------------------");
-                    for(int j = 0; j < teams.length; j++){
+                    for(int j = 0; j <= i; j++){
                         System.out.printf("%s, %d, %s ~ %s\n", teams[j].teamName, 
                         teams[j].maxQty, teams[j].startDate, teams[j].endDate);
                     }
+
+                    break;
                 }else{
                     System.out.println("입력 값이 옳지 않습니다. 입력을 종료합니다.");
                     System.out.println("-------------------");

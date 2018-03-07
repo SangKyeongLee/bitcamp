@@ -1,14 +1,15 @@
 package step03.assignment;
 
+import step03.Score;
 
 public class Test01{
     public static void main(String[] args){
         java.util.Scanner keyScan = new java.util.Scanner(System.in);
 
-        step03.Score scores[] = new step03.Score[3];
+        Score scores[] = new Score[3];
 
         for(int i = 0; i < scores.length; i++){ 
-            scores[i] = new step03.Score();
+            scores[i] = new Score();
 
             System.out.print("입력: ");
             scores[i].name = keyScan.next();

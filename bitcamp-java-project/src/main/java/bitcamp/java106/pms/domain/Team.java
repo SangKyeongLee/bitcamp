@@ -1,4 +1,4 @@
-package bitcamp.java106.pms.test;
+package bitcamp.java106.pms.domain;
 
 public class Team{
     public String teamName;

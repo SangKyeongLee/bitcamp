@@ -1,6 +1,6 @@
 package bitcamp.java106.pms;
 
-import bitcamp.java106.pms.test.Team;
+import bitcamp.java106.pms.domain.Team;
 
 public class App {
     public static void main(String[] args) {

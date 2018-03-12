@@ -40,6 +40,11 @@ public class App_2 {
                 continue;
             }
 
+            if(m.equals("quit")){
+                System.out.println("안녕히가세요!");
+                break;
+            }
+
             if(m.equals("team/add")) {
                 
                 // for(int j = 1;j = j; j++) {
@@ -80,28 +85,28 @@ public class App_2 {
                 
                 continue;
             }
+            
             if(view[0].equals("team/view")) {
+                Team teamInfo = null;
                 for(int f = 0; f < count; f++){
                     if( view[1].equals(teams[f].teamName) ){
-                        System.out.printf("팀명: %s\n",teams[f].teamName);
-                        System.out.printf("설명: %s\n",teams[f].description);
-                        System.out.printf("인원: %d\n",teams[f].maxQty);
-                        System.out.printf("기간: %s ~ %s\n", teams[f].startDate, teams[f].endDate);
-                        
+                        teamInfo = teams[f];
                         break;
                     }
-                    
                 }
-                
-                continue;
 
-            } else if (view[0].equals("team/view") == false){
-                System.out.println("해당하는 명령어가 없습니다.");
-            } else {
-                System.out.println("해당 이름의 팀이 없습니다.");
+                if(teamInfo == null) {
+                    System.out.println("해당 이름의 팀이 없습니다.");
+                } else {
+                    System.out.printf("팀명: %s\n",teamInfo.teamName);
+                    System.out.printf("설명: %s\n",teamInfo.description);
+                    System.out.printf("인원: %d\n",teamInfo.maxQty);
+                    System.out.printf("기간: %s ~ %s\n", teamInfo.startDate, teamInfo.endDate);
+                }
             }
 
-                
+            
+
             if(m.equals("member/add")) {
 
                     members[countM] = new Member();
@@ -131,10 +136,7 @@ public class App_2 {
                 
             }
 
-            if(m.equals("quit")){
-                System.out.println("안녕히가세요!");
-                break;
-            }
+            
 
         }
 

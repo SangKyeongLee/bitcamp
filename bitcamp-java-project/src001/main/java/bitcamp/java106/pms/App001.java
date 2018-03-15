@@ -1,19 +1,17 @@
 package bitcamp.java106.pms;
 
-import java.util.Scanner;
 import bitcamp.java106.pms.controller.TeamController;
 import bitcamp.java106.pms.controller.MemberController;
 import bitcamp.java106.pms.util.Console;
+import java.util.Scanner;
 
-public class App {
-    
-    static String option = null; // 문자열 없음!
+public class App001 {
     static Scanner keyScan = new Scanner(System.in);
-
-    static void onQuit() {
-        System.out.println("안녕히 가세요!");        
-    }
     
+    static void onQuit() {
+        System.out.println("안녕히 가세요!");
+    }
+
     static void onHelp() {
         System.out.println("[도움말]");
         System.out.println("팀 등록 명령 : team/add");
@@ -24,20 +22,19 @@ public class App {
         System.out.println("회원 상세조회 명령 : member/view 아이디");
         System.out.println("종료 : quit");
     }
-
+    
     public static void main(String[] args) {
         TeamController.keyScan = keyScan;
         MemberController.keyScan = keyScan;
         Console.keyScan = keyScan;
 
         while (true) {
-            String[] arr = Console.prompt();
+            String[] arr = Console.onPrompt();
             String menu = arr[0];
 
+            String option = null;
             if (arr.length == 2) {
                 option = arr[1];
-            }else{
-                option = null;
             }
             
             if (menu.equals("quit")) {
@@ -45,11 +42,27 @@ public class App {
                 break;
             } else if (menu.equals("help")) {
                 onHelp();                
-            } else if (menu.startsWith("team/")){
-                TeamController.service(menu, option);
-            } else if (menu.startsWith("member/")) {
-                MemberController.service(menu, option);
-            }  else {
+            } else if (menu.equals("team/add")) {
+                TeamController.onTeamAdd();
+            } else if (menu.equals("team/list")) {
+                TeamController.onTeamList();
+            } else if (menu.equals("team/view")) {
+                TeamController.onTeamView(option); 
+            } else if (menu.equals("team/update")) {
+                TeamController.onTeamUpdate(option);     
+            } else if (menu.equals("team/delete")) {
+                TeamController.onTeamDelete(option);           
+            } else if (menu.equals("member/add")) {
+                MemberController.onMemberAdd();
+            } else if (menu.equals("member/list")) {
+                MemberController.onMemberList();
+            } else if (menu.equals("member/view")) {
+                MemberController.onMemberView(option);
+            } else if (menu.equals("member/update")) {
+                MemberController.onMemberUpdate(option);
+            }else if (menu.equals("member/delete")) {
+                MemberController.onMemberDelete(option);
+            } else {
                 System.out.println("명령어가 올바르지 않습니다.");
             }
 

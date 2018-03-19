@@ -2,7 +2,7 @@
 
 package step07;
 
-public class Exam02_1 {
+public class ExamX_2 {
     public static void main(String[] args) {
         Score2 score = new Score2();
         score.name = "홍길동";

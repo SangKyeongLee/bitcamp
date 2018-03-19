@@ -1,3 +1,4 @@
+// 메서드 분류
 package step07;
 
 public class Calculator {

@@ -2,7 +2,7 @@
 
 package step07;
 
-public class Exam01_1 {
+public class ExamX_1 {
     public static void main(String[] args) {
         Score score = new Score();
 

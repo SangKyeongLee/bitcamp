@@ -5,7 +5,7 @@ public class Exam08_4 {
         float f = 3.14f;
         double d = 9876.56789;
 
-        int i = f;
-        long l = d;
+        //int i = f;
+        //long l = d;
     }
 }

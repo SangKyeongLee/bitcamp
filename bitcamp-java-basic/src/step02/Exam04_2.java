@@ -18,6 +18,6 @@ public class Exam04_2 {
         l = i; // OK. l = long, long > Integer. l <= i
 
         int k = 100;
-        k = l; // NO. k = Integer, l = long. k <= l CAN'T
+        //k = l; // NO. k = Integer, l = long. k <= l CAN'T
     }
 }

@@ -8,11 +8,11 @@ public class Exam08_7 {
 
         // CANNOT
         boolean bool;
-        bool = (boolean)l; //NO!!
+        //bool = (boolean)l; //NO!!
 
-        boolean v1 = (boolean)"true"; //NO!!
-        char v2 = (char)"가"; //NO!!
-        int v3 = (int)"123"; //NO!!
-        float v4 = (int) "3.14f"; //NO!!
+        //boolean v1 = (boolean)"true"; //NO!!
+        //char v2 = (char)"가"; //NO!!
+        //int v3 = (int)"123"; //NO!!
+        //float v4 = (int) "3.14f"; //NO!!
     }
 }

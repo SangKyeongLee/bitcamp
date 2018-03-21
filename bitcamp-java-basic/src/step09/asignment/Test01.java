@@ -15,9 +15,10 @@ public class Test01 {
         String date = arr[2];
         
         cal.set(Calendar.YEAR, Integer.parseInt(year));
-        cal.set(Calendar.MONTH, Integer.parseInt(month)-1);
+        cal.set(Calendar.MONTH, Integer.parseInt(month));
         cal.set(Calendar.DATE, Integer.parseInt(date));
         
+        System.out.println(month);
         System.out.println(cal.get(Calendar.YEAR));
         System.out.println(cal.get(Calendar.MONTH));
         System.out.println(cal.get(Calendar.DATE));

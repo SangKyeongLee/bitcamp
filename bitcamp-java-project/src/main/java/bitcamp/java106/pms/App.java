@@ -1,19 +1,22 @@
 package bitcamp.java106.pms;
 
 import java.util.Scanner;
+
+import bitcamp.java106.pms.controller.BoardController;
 import bitcamp.java106.pms.controller.MemberController;
 import bitcamp.java106.pms.controller.TeamController;
 import bitcamp.java106.pms.util.Console;
 
+// ver 0.2 - member 메뉴를 처리하는 코드를 관련 클래스인 MemberController로 옮긴다.
+// ver 0.1 - team 메뉴를 처리하는 코드를 TeamController로 옮긴다.
 public class App {
-    
-    static String option = null; // 문자열 없음!
     static Scanner keyScan = new Scanner(System.in);
-
-    static void onQuit() {
-        System.out.println("안녕히 가세요!");        
-    }
+    public static String option = null; 
     
+    static void onQuit() {
+        System.out.println("안녕히 가세요!");
+    }
+
     static void onHelp() {
         System.out.println("[도움말]");
         System.out.println("팀 등록 명령 : team/add");
@@ -26,30 +29,35 @@ public class App {
     }
 
     public static void main(String[] args) {
-        TeamController.keyScan = keyScan;
-        MemberController.keyScan = keyScan;
+        
+        TeamController teamController = new TeamController(keyScan);
+        MemberController memberController = new MemberController(keyScan);
+        BoardController boardController = new BoardController(keyScan);
+        
         Console.keyScan = keyScan;
 
         while (true) {
             String[] arr = Console.prompt();
-            String menu = arr[0];
 
+            String menu = arr[0];
             if (arr.length == 2) {
                 option = arr[1];
-            }else{
+            } else {
                 option = null;
             }
-            
+
             if (menu.equals("quit")) {
                 onQuit();
                 break;
             } else if (menu.equals("help")) {
-                onHelp();                
-            } else if (menu.startsWith("team/")){
-                TeamController.service(menu, option);
+                onHelp();
+            } else if (menu.startsWith("team/")) {
+                teamController.service(menu, option);
             } else if (menu.startsWith("member/")) {
-                MemberController.service(menu, option);
-            }  else {
+                memberController.service(menu, option);
+            } else if (menu.startsWith("board/")) {
+                boardController.service(menu, option);
+            }else {
                 System.out.println("명령어가 올바르지 않습니다.");
             }
 

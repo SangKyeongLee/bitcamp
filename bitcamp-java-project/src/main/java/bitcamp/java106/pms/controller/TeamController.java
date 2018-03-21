@@ -12,9 +12,7 @@ public class TeamController {
     Scanner keyScan;
     
     TeamDao teamDao = new TeamDao();
-    Team[] teams = new Team[1000];
-    int teamIndex = 0;
-    
+
     public TeamController(Scanner scanner) {
         this.keyScan = scanner;
     }
@@ -38,7 +36,7 @@ public class TeamController {
     int getTeamIndex(String name) {
         Team[] list = teamDao.list();
         for (int i = 0; i < list.length; i++) {
-            if (list == null) continue;
+            if (list[i] == null) continue;
             if (name.equals(list[i].name.toLowerCase())) {
                 return i;
             }
@@ -74,7 +72,7 @@ public class TeamController {
         System.out.println("[팀 목록]");
         Team[] list = teamDao.list();
         for (int i = 0; i < list.length; i++) {
-            if (list == null) continue;
+            if (list[i] == null) continue;
             System.out.printf("%s, %d, %s ~ %s\n", 
                 list[i].name, list[i].maxQty, list[i].startDate,
                 list[i].endDate);
@@ -109,12 +107,11 @@ public class TeamController {
             return;
         }
         
-        int i = this.getTeamIndex(name);
+        Team team = teamDao.get(this.getTeamIndex(name));
 
-        if (i == -1) {
+        if (team == null) {
             System.out.println("해당 이름의 팀이 없습니다.");
         } else {
-            Team team = this.teams[i];
             Team updateTeam = new Team();
             System.out.printf("팀명(%s)? ", team.name);
             updateTeam.name = this.keyScan.nextLine();
@@ -127,7 +124,8 @@ public class TeamController {
             updateTeam.startDate = Date.valueOf(this.keyScan.nextLine());
             System.out.printf("종료일(%s)? ", team.endDate);
             updateTeam.endDate = Date.valueOf(this.keyScan.nextLine());
-            this.teams[i] = updateTeam;
+            updateTeam.no = team.no;
+            teamDao.update(updateTeam);
             System.out.println("변경하였습니다.");
         }
     }
@@ -139,13 +137,13 @@ public class TeamController {
             return; 
         }
         
-        int i = this.getTeamIndex(name);
+        Team team = teamDao.get(this.getTeamIndex(name));
 
-        if (i == -1) {
+        if (team == null) {
             System.out.println("해당 이름의 팀이 없습니다.");
         } else {
             if (Console.confirm("정말 삭제하시겠습니까?")) {
-                this.teams[i] = null;
+                teamDao.delete(team);
                 System.out.println("삭제하였습니다.");
             }
         }

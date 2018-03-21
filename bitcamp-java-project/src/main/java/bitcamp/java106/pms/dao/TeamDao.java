@@ -7,6 +7,7 @@ public class TeamDao {
     int teamIndex = 0;
     
     public void insert(Team team) {
+        team.no = teamIndex;
         this.teams[this.teamIndex++] = team;
     }
     
@@ -24,4 +25,11 @@ public class TeamDao {
         return teams[i];
     }
     
+    public void update(Team team) {
+        teams[team.no] = team;
+    }
+    
+    public void delete(Team team) {
+        teams[team.no] = null;
+    }
 }

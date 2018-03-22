@@ -5,6 +5,7 @@ import java.util.Scanner;
 import bitcamp.java106.pms.controller.BoardController;
 import bitcamp.java106.pms.controller.MemberController;
 import bitcamp.java106.pms.controller.TeamController;
+import bitcamp.java106.pms.controller.TeamMemberController;
 import bitcamp.java106.pms.util.Console;
 
 // ver 0.2 - member 메뉴를 처리하는 코드를 관련 클래스인 MemberController로 옮긴다.
@@ -33,7 +34,7 @@ public class App {
         TeamController teamController = new TeamController(keyScan);
         MemberController memberController = new MemberController(keyScan);
         BoardController boardController = new BoardController(keyScan);
-        
+        TeamMemberController teamMemberController = new TeamMemberController(keyScan);
         Console.keyScan = keyScan;
 
         while (true) {
@@ -57,7 +58,7 @@ public class App {
                 memberController.service(menu, option);
             } else if (menu.startsWith("board/")) {
                 boardController.service(menu, option);
-            }else {
+            } else {
                 System.out.println("명령어가 올바르지 않습니다.");
             }
 

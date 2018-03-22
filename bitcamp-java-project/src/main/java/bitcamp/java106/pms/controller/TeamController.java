@@ -5,12 +5,14 @@ import java.sql.Date;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.dao.TeamDao;
+import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
 public class TeamController {
     Scanner keyScan;
     
+    MemberController memberController = new MemberController(keyScan);
     TeamDao teamDao = new TeamDao();
 
     public TeamController(Scanner scanner) {
@@ -28,6 +30,8 @@ public class TeamController {
             this.onTeamUpdate(option);
         } else if (menu.equals("team/delete")) {
             this.onTeamDelete(option);
+        } else if (menu.equals("team/member/add")) {
+            this.onTeamMemberAdd(option);
         } else {
             System.out.println("명령어가 올바르지 않습니다.");
         }
@@ -146,6 +150,26 @@ public class TeamController {
                 teamDao.delete(team);
                 System.out.println("삭제하였습니다.");
             }
+        }
+    }
+    
+    void onTeamMemberAdd(String name) {
+        System.out.println("[팀 멤버 추가하기]");
+        if (name == null) {
+            System.out.println("팀명을 입력하시기 바랍니다.");
+            return;
+        }
+        
+        Team team = teamDao.get(this.getTeamIndex(name));
+
+        if (team == null) {
+            System.out.println("해당 이름의 팀이 없습니다.");
+        } else {
+            Member teamMember = new Member();
+            System.out.print("추가할 멤버의 아이디는? "); 
+            teamMember.id = keyScan.nextLine();
+            
+            memberController.onTeamMember(teamMember.id);
         }
     }
     

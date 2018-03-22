@@ -25,7 +25,7 @@ public class MemberController {
         } else if (menu.equals("member/update")) {
             this.onMemberUpdate(option);                
         } else if (menu.equals("member/delete")) {
-            this.onMemberDelete(option);                
+            this.onMemberDelete(option);
         } else {
             System.out.println("명령어가 올바르지 않습니다.");
         }
@@ -120,6 +120,20 @@ public class MemberController {
                 System.out.println("삭제하였습니다.");
             }
         }
+    }
+    
+    void onTeamMember(String id) {
+        System.out.println("[회원 검색]");
+        if (id == null) {
+            System.out.println("아이디를 입력하시기 바랍니다.");
+            return;
+        }
+        System.out.println("onTeamMember:"+id);
+        Member member = memberDao.get(id);
+        if(member == null)
+            System.out.println("null값입니다.");
+        else
+            System.out.println("값이 있습니다.");
     }
     
 }

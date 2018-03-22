@@ -1,8 +1,9 @@
 package bitcamp.java106.pms.dao;
 
 import bitcamp.java106.pms.domain.Member;
+import bitcamp.java106.pms.domain.Team;
 
-public class MemberDao {
+public class TeamMemberDao {
     Member[] members = new Member[1000];
     int memberIndex = 0;
     
@@ -11,7 +12,7 @@ public class MemberDao {
         this.members[this.memberIndex++] = member;
     }
     
-    public Member[] list() { 
+    public Member[] list() {
         Member[] arr = new Member[memberIndex];
         for(int i = 0; i < memberIndex; i++) {
             arr[i] = members[i];
@@ -26,8 +27,6 @@ public class MemberDao {
                 return this.members[i];
             }
         }
-        System.out.println("get:"+id);
-        System.out.println("memidx:"+this.memberIndex);
         return null;
     }
     

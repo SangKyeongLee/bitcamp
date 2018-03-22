@@ -17,7 +17,7 @@ public class TeamDao {
             arr[i] = teams[i];
         }
         return arr;
-    }
+    } 
     
     public Team get(int i) {
         if(i == -1)

@@ -31,16 +31,7 @@ public class MemberController {
         }
     }
 
-    int getMemberIndex(String id) {
-        Member[] list = memberDao.list();
-        for (int i = 0; i < list.length; i++) {
-            if (list[i] == null) continue;
-            if (id.equals(list[i].id.toLowerCase())) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    
 
     void onMemberAdd() {
         System.out.println("[회원 정보 입력]");
@@ -76,7 +67,7 @@ public class MemberController {
             return;
         }
         
-        Member member = memberDao.get(this.getMemberIndex(id));
+        Member member = memberDao.get(id);
 
         if (member == null) {
             System.out.println("해당 아이디의 회원이 없습니다.");
@@ -94,17 +85,18 @@ public class MemberController {
             return;
         }
         
-        Member member = memberDao.get(this.getMemberIndex(id));
+        Member member = memberDao.get(id);
         
         if (member == null) {
             System.out.println("해당 아이디의 회원이 없습니다.");
         } else {
             Member updateMember = new Member();
-            System.out.printf("아이디(%s)? ", member.id);
-            updateMember.id = this.keyScan.nextLine();
+            System.out.printf("아이디 : %s \n", member.id);
+            updateMember.id = member.id;
             System.out.printf("이메일(%s)? ", member.email);
             updateMember.email = this.keyScan.nextLine();
-            updateMember.password = member.password;
+            System.out.printf("암호(%s)? ", member.password);
+            updateMember.password = this.keyScan.nextLine();
             updateMember.no = member.no;
             memberDao.update(updateMember);
             System.out.println("변경하였습니다.");
@@ -118,7 +110,7 @@ public class MemberController {
             return;
         }
         
-        Member member = memberDao.get(this.getMemberIndex(id));
+        Member member = memberDao.get(id);
 
         if (member == null) {
             System.out.println("해당 아이디의 회원이 없습니다.");

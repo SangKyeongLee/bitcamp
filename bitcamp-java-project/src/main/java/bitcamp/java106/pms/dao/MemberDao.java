@@ -19,10 +19,14 @@ public class MemberDao {
         return arr;
     }
     
-    public Member get(int i) {
-        if (i == -1)
-            return null;
-        return members[i];
+    public Member get(String id) {
+        for (int i = 0; i < this.memberIndex; i++) {
+            if (this.members[i] == null) continue;
+            if (id.equals(this.members[i].id.toLowerCase())) {
+                return this.members[i];
+            }
+        }
+        return null;
     }
     
     public void update(Member member) {

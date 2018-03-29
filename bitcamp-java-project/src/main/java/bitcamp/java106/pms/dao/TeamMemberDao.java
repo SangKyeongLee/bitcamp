@@ -8,13 +8,10 @@ public class TeamMemberDao {
     private ArrayList memberCollection = new ArrayList();
     
     private int getIndex(String teamName, String memberId) {
-        String ptn = teamName.toLowerCase();
-        String pmi = memberId.toLowerCase();
-        for (int i = 0; i < this.teamCollection.size(); i++) {
+        for (int i = 0; i < teamCollection.size(); i++) {
             
-            String tn = ((String)this.teamCollection.get(i)).toLowerCase();
-            String mi = ((String)this.memberCollection.get(i)).toLowerCase();
-            if (tn.equals(ptn) && mi.equals(pmi)) {
+            if ((this.teamCollection.get(i).toString()).toLowerCase().equals(teamName.toLowerCase()) &&
+                    (this.memberCollection.get(i).toString()).toLowerCase().equals(memberId.toLowerCase())) {
                 return i;
             }
         }
@@ -52,8 +49,8 @@ public class TeamMemberDao {
     private int getMemberCount(String teamName) {
         int cnt = 0;
         String ptn = teamName.toLowerCase();
-        for (int i = 0; i < this.teamCollection.size(); i++) {
-            String tn = ((String)this.teamCollection.get(i)).toLowerCase();
+        for (int i = 0; i < teamCollection.size(); i++) {
+            String tn = (teamCollection.get(i).toString()).toLowerCase();
             if (tn.equals(ptn)) {
                 cnt++;
             }
@@ -66,7 +63,7 @@ public class TeamMemberDao {
         String[] members = new String[this.getMemberCount(teamName)];
         
         for (int i = 0, x = 0; i < this.teamCollection.size(); i++) {
-            String tn = ((String)this.teamCollection.get(i)).toLowerCase();
+            String tn = (this.teamCollection.get(i).toString()).toLowerCase();
             if (tn.equals(ptn)) {
                 members[x++] = (String)this.memberCollection.get(i);
             }

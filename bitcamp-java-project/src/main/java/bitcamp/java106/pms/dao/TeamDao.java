@@ -19,30 +19,27 @@ public class TeamDao {
     }
     
     public Team get(String name) {
-        int index = this.getTeamIndex(name);
-        if (index < 0)
-            return null;
-        return (Team)this.collection.get(index);
+        int i;
+        if ((i = this.getTeamIndex(name)) != -1)
+        return (Team)this.collection.get(i);
+        return null;
     }
     
     public void update(Team team) {
-        int index = this.getTeamIndex(team.getName());
-        if (index < 0)
-            return;
-        this.collection.set(index, team);
+        int i;
+        if ((i = this.getTeamIndex(team.getName())) != -1)
+        this.collection.set(i, team);
     }
     
     public void delete(String name) {
-        int index = this.getTeamIndex(name);
-        if (index < 0)
-            return;
-        this.collection.remove(index);
+        int i;
+        if ((i = this.getTeamIndex(name)) != -1)
+            this.collection.remove(i);
     }
     
     private int getTeamIndex(String name) {
         for (int i = 0; i < this.collection.size(); i++) {
-            Team team = (Team)this.collection.get(i);
-            if (name.equals(team.getName().toLowerCase())) {
+            if (name.toLowerCase().equals(((Team)this.collection.get(i)).getName().toLowerCase())) {
                 return i;
             }
         }

@@ -8,7 +8,7 @@ public class Task {
     public static final int COMPLETE = 9;
     
     private static int count = 1;
-    
+
     private int no;
     private String title;
     private Date startDate;
@@ -18,7 +18,7 @@ public class Task {
     private Team team;
     
     public Task(Team team) {
-        this.no= count++;
+        this.no = count++;
         this.team = team;
     }
     

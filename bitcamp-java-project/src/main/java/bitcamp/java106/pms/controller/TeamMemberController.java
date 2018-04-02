@@ -10,7 +10,7 @@ import bitcamp.java106.pms.dao.TeamMemberDao;
 import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Team;
 
-public class TeamMemberController {
+public class TeamMemberController implements Controller {
     
     Scanner keyScan;
     TeamDao teamDao;
@@ -84,7 +84,7 @@ public class TeamMemberController {
         
         Iterator<String> iterator = teamMemberDao.getMembers(teamName);
         if (iterator != null) {
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 System.out.printf("%s, ", iterator.next());
             }
         }

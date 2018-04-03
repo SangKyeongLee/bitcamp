@@ -1,4 +1,4 @@
-// Controller 규칙에 따라 메서드 작성
+// 팀 작업 관리 기능을 모아 둔 클래스
 package bitcamp.java106.pms.controller;
 
 import java.sql.Date;
@@ -13,8 +13,6 @@ import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
-//TaskController는 Controller 규칙을 이행한다.
-//=> Controller 규칙에 따라 메서드를 만든다.
 public class TaskController implements Controller {
     
     Scanner keyScan;
@@ -110,8 +108,8 @@ public class TaskController implements Controller {
     private void onTaskList(final Team team) {
         System.out.println("[팀 작업 목록]");
         
-        Iterator<Task> iterator = taskDao.list();
-        while (iterator.hasNext()){
+        Iterator<Task> iterator = taskDao.list(team.getName()); 
+        while (iterator.hasNext()) {
             Task task = iterator.next();
             System.out.printf("%d,%s,%s,%s,%s\n", 
                     task.getNo(), task.getTitle(), 

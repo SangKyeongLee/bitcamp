@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import bitcamp.java106.pms.domain.Team;
 
 public class TeamDao extends AbstractDao<Team> {
-    
+
     public int indexOf(Object key) {
         String name = (String) key;
         for (int i = 0; i < collection.size(); i++) {
-            if (name.toLowerCase().equalsIgnoreCase(collection.get(i).getName())) {
+            if (name.equalsIgnoreCase(collection.get(i).getName())) {
                 return i;
             }
         }

@@ -7,7 +7,7 @@ import bitcamp.java106.pms.domain.Board;
 public class BoardDao extends AbstractDao<Board> {
     
     public int indexOf(Object key) {
-        int no = (Integer) key;
+        int no = (Integer) key; // Integer ==> int : auto-unboxing
         for (int i = 0; i < collection.size(); i++) {
             Board originBoard = collection.get(i);
             if (originBoard.getNo() == no) {

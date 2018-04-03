@@ -60,18 +60,17 @@ public class App {
         ClassroomController classroomController = new ClassroomController(
                 keyScan);
         
-        HashMap<String,Controller> controllerMap = 
-                new HashMap<>();
-
-        controllerMap.put("board", boardController);
-        controllerMap.put("classroom", classroomController);
-        controllerMap.put("member", memberController);
-        controllerMap.put("task", taskController);
-        controllerMap.put("team", teamController);
-        controllerMap.put("team/member", teamMemberController);
-        
         Console.keyScan = keyScan;
 
+        HashMap<String, Controller> controllerMap = new HashMap<>();
+        
+        controllerMap.put("team", teamController);
+        controllerMap.put("team/member", teamMemberController);
+        controllerMap.put("member", memberController);
+        controllerMap.put("board", boardController);
+        controllerMap.put("task", taskController);
+        controllerMap.put("classroom", classroomController);
+        
         while (true) {
             String[] arr = Console.prompt();
 
@@ -81,7 +80,7 @@ public class App {
             } else {
                 option = null;
             }
-            
+
             if (menu.equals("quit")) {
                 onQuit();
                 break;
@@ -97,9 +96,8 @@ public class App {
                 } else {
                     System.out.println("명령어가 올바르지 않습니다.");
                 }
+                System.out.println(); 
             }
-
-            System.out.println(); 
         }
     }
     static void prepareMemberData(MemberDao memberDao) {

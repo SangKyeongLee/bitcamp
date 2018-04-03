@@ -7,10 +7,10 @@ import bitcamp.java106.pms.domain.Member;
 public class MemberDao extends AbstractDao<Member> {
     
     public int indexOf(Object key) {
-        String id = (String) key;
+        String Id = (String) key;
         for (int i = 0; i < collection.size(); i++) {
-            Member originMember = collection.get(i);
-            if (originMember.getId().toLowerCase().equals(id.toLowerCase())) {
+            Member originMember = (Member)collection.get(i);
+            if (originMember.getId().toLowerCase().equals(Id.toLowerCase())) {
                 return i;
             }
         }

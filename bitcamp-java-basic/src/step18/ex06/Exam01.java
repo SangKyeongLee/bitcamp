@@ -38,7 +38,5 @@ public class Exam01 {
         // URL 정보에서 파일 경로를 문자열로 추출한다.
         System.out.println(url.getPath());
         System.out.println(url.getFile()); // getPath() + query
-        
-        
     }
 }

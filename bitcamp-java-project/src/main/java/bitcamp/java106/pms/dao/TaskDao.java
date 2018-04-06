@@ -29,6 +29,7 @@ public class TaskDao extends AbstractDao<Task> {
         }
         return -1;
     }
+    
 }
 
 //ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 

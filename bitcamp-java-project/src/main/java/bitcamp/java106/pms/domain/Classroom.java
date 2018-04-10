@@ -3,7 +3,7 @@ package bitcamp.java106.pms.domain;
 import java.sql.Date;
 
 public class Classroom {
-    private static int count;
+    private static int count = 1;
     
     private int no;
     private String title;
@@ -12,7 +12,7 @@ public class Classroom {
     private String room;
     
     public Classroom() {
-        this.no = ++count;
+        this.no = count++;
     }
     
     @Override
@@ -25,6 +25,9 @@ public class Classroom {
         return no;
     }
     public void setNo(int no) {
+        if (no >= count) {
+            count = no + 1;
+        }
         this.no = no;
     }
     public String getTitle() {

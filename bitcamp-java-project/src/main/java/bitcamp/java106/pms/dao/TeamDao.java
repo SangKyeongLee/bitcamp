@@ -8,20 +8,17 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
-import bitcamp.java106.pms.domain.Member;
-import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 
 @Component
 public class TeamDao extends AbstractDao<Team> {
-
+    
     public TeamDao() throws Exception {
         load();
     }
     
     public void load() throws Exception {
         Scanner in = new Scanner(new FileReader("data/team.csv"));
-    
         while (true) {
             try {
                 String[] arr = in.nextLine().split(",");
@@ -31,10 +28,10 @@ public class TeamDao extends AbstractDao<Team> {
                 team.setMaxQty(Integer.parseInt(arr[2]));
                 team.setStartDate(Date.valueOf(arr[3]));
                 team.setEndDate(Date.valueOf(arr[4]));
-                
                 this.insert(team);
-            } catch (Exception e) {
-                break;
+            } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+                //e.printStackTrace();
+                break; // 반복문을 나간다.
             }
         }
         in.close();
@@ -47,11 +44,13 @@ public class TeamDao extends AbstractDao<Team> {
         
         while (teams.hasNext()) {
             Team team = teams.next();
-            out.printf("%s,%s,%d,%s,%s\n", team.getName(), team.getDescription(),
-                    team.getMaxQty(), team.getStartDate(), team.getEndDate());
+            out.printf("%s,%s,%d,%s,%s\n", 
+                    team.getName(), team.getDescription(), team.getMaxQty(),
+                    team.getStartDate(), team.getEndDate());
         }
         out.close();
     }
+        
     public int indexOf(Object key) {
         String name = (String) key;
         for (int i = 0; i < collection.size(); i++) {
@@ -63,6 +62,7 @@ public class TeamDao extends AbstractDao<Team> {
     }
 }
 
+//ver 24 - File I/O 적용
 //ver 23 - @Component 애노테이션을 붙인다.
 //ver 22 - 추상 클래스 AbstractDao를 상속 받는다.
 //ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 

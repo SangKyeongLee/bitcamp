@@ -1,9 +1,8 @@
 // Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller.classroom;
 
+import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Iterator;
-import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.controller.Controller;
@@ -11,7 +10,6 @@ import bitcamp.java106.pms.dao.ClassroomDao;
 import bitcamp.java106.pms.domain.Classroom;
 import bitcamp.java106.pms.server.ServerRequest;
 import bitcamp.java106.pms.server.ServerResponse;
-import bitcamp.java106.pms.util.Console;
 
 @Component("/classroom/add")
 public class ClassroomAddController implements Controller {
@@ -21,17 +19,19 @@ public class ClassroomAddController implements Controller {
         this.classroomDao = classroomDao;
     }
     
-    public void service(ServerRequest request,ServerResponse response) {
+    @Override
+    public void service(ServerRequest request, ServerResponse response) {
         Classroom classroom = new Classroom();
         classroom.setTitle(request.getParameter("title"));
         classroom.setStartDate(Date.valueOf(request.getParameter("startDate")));
         classroom.setEndDate(Date.valueOf(request.getParameter("endDate")));
         classroom.setRoom(request.getParameter("room"));
-        
         classroomDao.insert(classroom);
+        
+        PrintWriter out = response.getWriter();
+        out.println("등록 성공!");
     }
 }
 
-//ver 23 - @Component 애노테이션을 붙인다. ClassroomDao를 받도록 생성자 변경.
-//ver 22 - ClassroomDao 변경 사항에 맞춰 이 클래스를 변경한다.
-//ver 20 - 클래스 추가
+//ver 28 - 네트워크 버전으로 변경
+//ver 26 - ClassroomController에서 add() 메서드를 추출하여 클래스로 정의.

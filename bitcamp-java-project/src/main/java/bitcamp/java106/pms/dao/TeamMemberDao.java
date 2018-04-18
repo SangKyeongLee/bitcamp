@@ -15,7 +15,7 @@ import bitcamp.java106.pms.annotation.Component;
 @Component
 public class TeamMemberDao {
     
-    private HashMap<String, ArrayList<String>> collection = new HashMap<>();
+    private HashMap<String, ArrayList<String>> collection;
  
     public TeamMemberDao() throws Exception {
         load();
@@ -25,13 +25,14 @@ public class TeamMemberDao {
     public void load() throws Exception {
         try (
                 ObjectInputStream in = new ObjectInputStream(
-                                       new BufferedInputStream(
-                                       new FileInputStream("data/teammember.data")));
-                ) {
-
+                               new BufferedInputStream(
+                               new FileInputStream("data/teammember.data")));
+            ) {
+        
             try {
                 collection = (HashMap<String,ArrayList<String>>) in.readObject();
-            } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+            } catch (Exception e) {
+                // 데이터를 읽다가 오류가 발생하면 빈 해시맵 객체를 만든다.
                 collection = new HashMap<>();
             }
         }
@@ -43,8 +44,9 @@ public class TeamMemberDao {
                                 new BufferedOutputStream(
                                 new FileOutputStream("data/teammember.data")));
             ) {
-                out.writeObject(collection);
-        }
+            
+            out.writeObject(collection);
+        } 
     }
     
     

@@ -21,7 +21,7 @@ import bitcamp.java106.pms.server.ServerResponse;
 public class AppServer {
     
     ApplicationContext iocContainer;
-
+    
     AppServer() throws Exception {
         init();
     }
@@ -73,14 +73,14 @@ public class AppServer {
         System.out.println("회원 상세조회 명령 : member/view 아이디");
         System.out.println("종료 : quit");
     }
-
+    
     void service() throws Exception {
         // 서버 소켓 준비
         ServerSocket serverSocket = new ServerSocket(8888);
-        System.out.println("서버 실행했음!");
+        System.out.println("서버 실행 했음!");
         
         while (true) {
-            // 대기열에서 클라이언트 소켓을 꺼낸다.
+            // 대기열에서 기다리고 있는 클라이언트 중에서 먼저 연결된 클라이언트를 꺼낸다. 
             Socket socket = serverSocket.accept();
             
             // 클라이언트 요청을 처리한다.
@@ -96,6 +96,7 @@ public class AppServer {
         try {
             out = new PrintWriter(socket.getOutputStream());
             in = new Scanner(socket.getInputStream());
+            
             // 클라이언트가 보낸 데이터에서 명령어와 데이터를 분리하여 객체를 준비한다.
             ServerRequest request = new ServerRequest(in.nextLine());
             
@@ -111,11 +112,11 @@ public class AppServer {
             } else {
                 out.println("해당 명령을 처리할 수 없습니다.");
             }
-            out.println();
+            out.println(); // 응답의 끝을 표시하기 위해 빈줄을 클라이언트로 보낸다.
             
         } catch (Exception e) {
             out.println("서버 오류!");
-            e.printStackTrace();
+            e.printStackTrace(out);
             out.println();
         } finally {
             out.close();
@@ -123,20 +124,14 @@ public class AppServer {
             try {socket.close();} catch (Exception e) {}
         }
     }
-    
-    
-    
+
     public static void main(String[] args) throws Exception {
         AppServer appServer = new AppServer();
         appServer.service();
     }
 }
 
-//ver 25 - 예외 처리 코드 추가.
-//ver 24 - 파일 저장 기능 호출. 멤버 및 팀 데이터를 준비하는 메서드 제거.
-//ver 17 - Task 관리 기능 추가
-// ver 15 - TeamDao와 MemberDao 객체 생성. 
-//          팀 멤버를 다루는 메뉴 추가.
+//ver 28 - 서버 만들기
 
 
 

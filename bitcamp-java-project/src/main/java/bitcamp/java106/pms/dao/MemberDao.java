@@ -4,25 +4,20 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
-import bitcamp.java106.pms.domain.Board;
 import bitcamp.java106.pms.domain.Member;
 
 @Component
 public class MemberDao extends AbstractDao<Member> {
-    public MemberDao() {
+    public MemberDao() throws Exception {
         load();
     }
     
-    public void load() {
+    public void load() throws Exception {
         try (
                 ObjectInputStream in = new ObjectInputStream(
                                new BufferedInputStream(
@@ -37,8 +32,6 @@ public class MemberDao extends AbstractDao<Member> {
                     break; // 반복문을 나간다.
                 }
             }
-        } catch (Exception e) {
-            System.out.println("게시물 데이터 로딩 오류!");
         }
     }
     
@@ -53,7 +46,7 @@ public class MemberDao extends AbstractDao<Member> {
             while (members.hasNext()) {
                 out.writeObject(members.next());
             }
-        }
+        } 
     }
         
     public int indexOf(Object key) {

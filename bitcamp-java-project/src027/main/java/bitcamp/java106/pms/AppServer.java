@@ -1,6 +1,10 @@
+// App을 서버로 만들기
 package bitcamp.java106.pms;
 
-import java.util.HashMap;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.context.ApplicationContext;
@@ -11,16 +15,25 @@ import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TaskDao;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.dao.TeamMemberDao;
-import bitcamp.java106.pms.util.Console;
+import bitcamp.java106.pms.server.ServerRequest;
+import bitcamp.java106.pms.server.ServerResponse;
 
-public class App {
+public class AppServer {
     
-    static ApplicationContext iocContainer;
+    ApplicationContext iocContainer;
+
+    AppServer() throws Exception {
+        init();
+    }
     
-    static Scanner keyScan = new Scanner(System.in);
-    public static String option = null; 
+    // 서버에서 작업하는데 필요한 객체를 준비한다.
+    void init() throws Exception {
+        // @Component가 붙은 클래스의 객체를 준비한다.
+        // 각각의 객체에 대해 의존 객체를 주입한다.
+        iocContainer = new ApplicationContext("bitcamp.java106.pms");
+    }
     
-    static void onQuit() {
+    void onQuit() {
         System.out.println("안녕히 가세요!");
         BoardDao boardDao = (BoardDao) iocContainer.getBean(BoardDao.class);
         ClassroomDao classroomDao = (ClassroomDao) iocContainer.getBean(ClassroomDao.class);
@@ -50,7 +63,7 @@ public class App {
         catch (Exception e) { System.out.println("팀멤버 데이터 저장 중 오류 발생!");}
     }
 
-    static void onHelp() {
+    void onHelp() {
         System.out.println("[도움말]");
         System.out.println("팀 등록 명령 : team/add");
         System.out.println("팀 조회 명령 : team/list");
@@ -61,54 +74,61 @@ public class App {
         System.out.println("종료 : quit");
     }
 
-    public static void main(String[] args) throws Exception {
+    void service() throws Exception {
+        // 서버 소켓 준비
+        ServerSocket serverSocket = new ServerSocket(8888);
+        System.out.println("서버 실행했음!");
         
-        // 기본 객체 준비
-        HashMap<String,Object> defaultBeans = new HashMap<>();
-        defaultBeans.put("java.util.Scanner", keyScan);
-        
-        // 기본 객체와 함께 @Component가 붙은 클래스의 객체를 준비한다.
-        iocContainer = new ApplicationContext(
-                "bitcamp.java106.pms", defaultBeans);
-        
-        Console.keyScan = keyScan;
-
         while (true) {
-            String[] arr = Console.prompt();
-
-            String menu = arr[0];
-            if (arr.length == 2) {
-                option = arr[1];
-            } else {
-                option = null;
-            }
+            // 대기열에서 클라이언트 소켓을 꺼낸다.
+            Socket socket = serverSocket.accept();
             
-            if (menu.equals("quit")) {
-                onQuit();
-                break;
-            } else if (menu.equals("help")) {
-                onHelp();
-            } else {
-                try {
-                    Controller controller = (Controller) iocContainer.getBean(menu);
-                    
-                    if (controller != null) {
-                        controller.service(menu, option);
-                    } else {
-                        System.out.println("명령어가 올바르지 않습니다.");
-                    }
-                } catch (Exception e) {
-                    if (keyScan.hasNextLine()) { 
-                        // 키보드 입력으로 남은 잔여 데이터가 있다면 읽어서 버린다.
-                        keyScan.nextLine(); 
-                    }
-                    System.out.println("작업 실행 중에 오류가 발생하였습니다.");
-                    System.out.println("명령을 다시 실행해주세요!");
-                }
-            }
-
-            System.out.println(); 
+            // 클라이언트 요청을 처리한다.
+            processRequest(socket);
         }
+    }
+    
+    void processRequest(Socket socket) {
+        
+        PrintWriter out = null;
+        Scanner in = null;
+        
+        try {
+            out = new PrintWriter(socket.getOutputStream());
+            in = new Scanner(socket.getInputStream());
+            // 클라이언트가 보낸 데이터에서 명령어와 데이터를 분리하여 객체를 준비한다.
+            ServerRequest request = new ServerRequest(in.nextLine());
+            
+            // 클라이언트 응답과 관련된 객체를 준비한다.
+            ServerResponse response = new ServerResponse(out);
+            
+            // 클라이언트가 보낸 명령어를 처리할 컨트롤러를 찾는다.
+            String path = request.getServerPath();
+            Controller controller = (Controller) iocContainer.getBean(path);
+            
+            if (controller != null) {
+                controller.service(request, response);
+            } else {
+                out.println("해당 명령을 처리할 수 없습니다.");
+            }
+            out.println();
+            
+        } catch (Exception e) {
+            out.println("서버 오류!");
+            e.printStackTrace();
+            out.println();
+        } finally {
+            out.close();
+            in.close();
+            try {socket.close();} catch (Exception e) {}
+        }
+    }
+    
+    
+    
+    public static void main(String[] args) throws Exception {
+        AppServer appServer = new AppServer();
+        appServer.service();
     }
 }
 

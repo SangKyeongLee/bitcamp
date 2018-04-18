@@ -4,12 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Date;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.domain.Board;
@@ -17,10 +14,11 @@ import bitcamp.java106.pms.domain.Board;
 @Component
 public class BoardDao extends AbstractDao<Board> {
     
-    public BoardDao() {
+    public BoardDao() throws Exception {
         load();
     }
-    public void load() {
+    
+    public void load() throws Exception {
         try (
                 ObjectInputStream in = new ObjectInputStream(
                                new BufferedInputStream(
@@ -29,14 +27,19 @@ public class BoardDao extends AbstractDao<Board> {
         
             while (true) {
                 try {
-                    this.insert((Board) in.readObject());
+                    // 게시물 데이터를 읽을 때 작업 번호가 가장 큰 것으로 
+                    // 카운트 값을 설정한다.
+                    Board board = (Board) in.readObject();
+                    if (board.getNo() >= Board.count)
+                        Board.count = board.getNo() + 1; 
+                        // 다음에 새로 추가할 게시물의 번호는 현재 읽은 게시물 번호 보다 
+                        // 1 큰 값이 되게 한다.
+                    this.insert(board);
                 } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
                     //e.printStackTrace();
                     break; // 반복문을 나간다.
                 }
             }
-        } catch (Exception e) {
-            System.out.println("게시물 데이터 로딩 오류!");
         }
     }
     
@@ -51,7 +54,7 @@ public class BoardDao extends AbstractDao<Board> {
             while (boards.hasNext()) {
                 out.writeObject(boards.next());
             }
-        }
+        } 
     }
     
     public int indexOf(Object key) {

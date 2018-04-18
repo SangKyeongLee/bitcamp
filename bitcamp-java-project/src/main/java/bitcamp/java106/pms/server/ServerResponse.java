@@ -9,8 +9,14 @@ public class ServerResponse {
     public ServerResponse(PrintWriter out) {
         this.out = out;
     }
-
+    
     public PrintWriter getWriter() {
         return this.out;
     }
 }
+
+//ver 28 - 클래스 추가
+
+
+
+

@@ -4,30 +4,22 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
-import bitcamp.java106.pms.domain.Board;
-import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Task;
-import bitcamp.java106.pms.domain.Team;
 
 @Component
 public class TaskDao extends AbstractDao<Task> {
     
-    public TaskDao() {
+    public TaskDao() throws Exception {
         load();
     }
     
-    public void load() {
+    public void load() throws Exception {
         try (
                 ObjectInputStream in = new ObjectInputStream(
                                new BufferedInputStream(
@@ -36,14 +28,19 @@ public class TaskDao extends AbstractDao<Task> {
         
             while (true) {
                 try {
-                    this.insert((Task) in.readObject());
+                    // 작업 데이터를 읽을 때 작업 번호가 가장 큰 것으로 
+                    // 카운트 값을 설정한다.
+                    Task task = (Task) in.readObject();
+                    if (task.getNo() >= Task.count)
+                        Task.count = task.getNo() + 1; 
+                        // 다음에 새로 추가할 작업의 번호는 현재 읽은 작업 번호 보다 
+                        // 1 큰 값이 되게 한다.
+                    this.insert(task);
                 } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
                     //e.printStackTrace();
                     break; // 반복문을 나간다.
                 }
             }
-        } catch (Exception e) {
-            System.out.println("게시물 데이터 로딩 오류!");
         }
     }
     
@@ -58,7 +55,7 @@ public class TaskDao extends AbstractDao<Task> {
             while (tasks.hasNext()) {
                 out.writeObject(tasks.next());
             }
-        }
+        } 
     }
         
     // 기존의 list() 메서드로는 작업을 처리할 수 없기 때문에 

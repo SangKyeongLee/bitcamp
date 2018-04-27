@@ -1,106 +1,84 @@
 package bitcamp.java106.pms.dao;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 
 import bitcamp.java106.pms.annotation.Component;
+import bitcamp.java106.pms.domain.Member;
+import bitcamp.java106.pms.domain.Task;
+import bitcamp.java106.pms.domain.Team;
+import bitcamp.java106.pms.jdbc.DataSource;
 
 @Component
 public class TeamMemberDao {
     
-    private HashMap<String, ArrayList<String>> collection;
- 
-    public TeamMemberDao() throws Exception {
-        load();
+    DataSource dataSource;
+    public TeamMemberDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
     
-    @SuppressWarnings("unchecked")
-    public void load() throws Exception {
+    public int insert(String teamName, String memberId) throws Exception {
         try (
-                ObjectInputStream in = new ObjectInputStream(
-                               new BufferedInputStream(
-                               new FileInputStream("data/teammember.data")));
-            ) {
-        
-            try {
-                collection = (HashMap<String,ArrayList<String>>) in.readObject();
-            } catch (Exception e) {
-                // 데이터를 읽다가 오류가 발생하면 빈 해시맵 객체를 만든다.
-                collection = new HashMap<>();
-            }
+            Connection con = dataSource.getConnection();
+            PreparedStatement stmt = con.prepareStatement(
+                "insert into pms_team_member(tnm, mid) values(?,?)");){
+
+            stmt.setString(1, teamName);
+            stmt.setString(2, memberId);
+
+            return stmt.executeUpdate(); 
         }
     }
     
-    public void save() throws Exception {
+    public int delete(String teamName, String memberId) throws Exception {
         try (
-                ObjectOutputStream out = new ObjectOutputStream(
-                                new BufferedOutputStream(
-                                new FileOutputStream("data/teammember.data")));
-            ) {
-            
-            out.writeObject(collection);
+            Connection con = dataSource.getConnection();
+            PreparedStatement stmt = con.prepareStatement(
+                "delete from pms_team_member where tnm=? and mid=?");) {
+
+            stmt.setString(1, teamName);
+            stmt.setString(2, memberId);
+            return stmt.executeUpdate();
         } 
     }
     
-    
-    public int addMember(String teamName, String memberId) {
-        String teamNameLC = teamName.toLowerCase();
-        String memberIdLC = memberId.toLowerCase();
-        
-        // 팀 이름으로 멤버 아이디가 들어 있는 ArrayList를 가져온다.
-        ArrayList<String> members = collection.get(teamNameLC);
-        if (members == null) { // 해당 팀의 멤버가 추가된 적이 없다면,
-            members = new ArrayList<>();
-            members.add(memberIdLC);
-            collection.put(teamNameLC, members);
-            return 1;
+    public List<String> selectList(String teamName) throws Exception {
+        try (
+            Connection con = dataSource.getConnection();
+            PreparedStatement stmt = con.prepareStatement(
+                "select mid from pms_team_member where tnm=?");){
+            
+            stmt.setString(1, teamName);
+            
+            try (ResultSet rs = stmt.executeQuery();) {
+                ArrayList<String> arr = new ArrayList<>();
+                while (rs.next()) {
+                    arr.add(rs.getString("mid"));
+                }
+                return arr;
+            } 
         }
-        
-        // ArrayList에 해당 아이디를 가진 멤버가 들어 있다면,
-        if (members.contains(memberIdLC)) {
-            return 0;
-        }
-        
-        members.add(memberIdLC);
-        return 1;
     }
     
-    public int deleteMember(String teamName, String memberId) {
-        String teamNameLC = teamName.toLowerCase();
-        String memberIdLC = memberId.toLowerCase();
-        
-        ArrayList<String> members = collection.get(teamNameLC);
-        if (members == null || !members.contains(memberIdLC)) 
-            return 0;
+    public boolean isExist(String teamName, String memberId) throws Exception {
+        try (
+            Connection con = dataSource.getConnection();
+            PreparedStatement stmt = con.prepareStatement(
+                "select mid from pms_team_member where tnm=? and mid=?");) {
 
-        members.remove(memberIdLC);
-        return 1;
-    }
-    
-    public Iterator<String> getMembers(String teamName) {
-        ArrayList<String> members = collection.get(teamName.toLowerCase());
-        if (members == null)
-            return null;
-        return members.iterator();
-    }
-    
-    public boolean isExist(String teamName, String memberId) {
-        String teamNameLC = teamName.toLowerCase();
-        String memberIdLC = memberId.toLowerCase();
-        
-        // 팀 이름으로 멤버 아이디가 들어 있는 ArrayList를 가져온다.
-        ArrayList<String> members = collection.get(teamNameLC);
-        if (members == null || !members.contains(memberIdLC)) 
-            return false;
-        
-        return true;
+            stmt.setString(1, teamName);
+            stmt.setString(2, memberId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }
 

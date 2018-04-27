@@ -14,42 +14,42 @@ import bitcamp.java106.pms.server.ServerResponse;
 
 @Component("/task/state")
 public class TaskStateController implements Controller {
-    
+
     TeamDao teamDao;
     TaskDao taskDao;
-    
+
     public TaskStateController(TeamDao teamDao, TaskDao taskDao) {
         this.teamDao = teamDao;
         this.taskDao = taskDao;
     }
-    
+
     @Override
     public void service(ServerRequest request, ServerResponse response) {
         PrintWriter out = response.getWriter();
-        String teamName = request.getParameter("teamName");
-        Team team = teamDao.get(teamName);
-        if (team == null) {
-            out.printf("'%s' 팀은 존재하지 않습니다.\n", teamName);
-            return;
-        }
-        int taskNo = Integer.parseInt(request.getParameter("no"));
-        Task task = taskDao.get(taskNo);
-        if (task == null) {
-            out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
-                    teamName, taskNo);
-            return;
-        }
-        int state = Integer.parseInt(request.getParameter("state"));
-        if (state == Task.READY || state == Task.WORKING || 
-                state == Task.COMPLETE) {
-            task.setState(state);
-            out.printf("작업 상태를 '%s'로 변경하였습니다.\n", 
-                    getStateLabel(state));
-        } else {
-            out.println("올바르지 않은 값입니다. 이전 상태를 유지합니다!");
+
+        try {
+            int no = Integer.parseInt(request.getParameter("no"));
+            int state = Integer.parseInt(request.getParameter("state"));
+            if (!(state == Task.READY || 
+                  state == Task.WORKING || 
+                  state == Task.COMPLETE)) {
+                out.println("올바르지 않은 값입니다. 이전 상태를 유지합니다!");
+                return;
+            }
+
+            int count = taskDao.updateState(no, state);
+            if (count == 0) {
+                out.println("해당 작업이 없습니다.");
+            } else {
+                out.printf("작업 상태를 '%s'로 변경하였습니다.\n", 
+                        getStateLabel(state));
+            }
+        } catch (Exception e) {
+            out.println("상태 변경 실패!");
+            e.printStackTrace(out);
         }
     }
-    
+
     // 다음 메서드와 같이 인스턴스 변수를 사용하지 않는 메서드라면,
     // static을 붙여 클래스 메서드로 만들라!
     public static String getStateLabel(int state) {

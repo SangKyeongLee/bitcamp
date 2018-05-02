@@ -1,16 +1,11 @@
 package bitcamp.java106.pms.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-
-import bitcamp.java106.pms.annotation.Component;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TeamMemberDao {

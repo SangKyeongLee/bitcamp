@@ -1,17 +1,11 @@
 package bitcamp.java106.pms.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
-import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.domain.Classroom;
 
 @Component

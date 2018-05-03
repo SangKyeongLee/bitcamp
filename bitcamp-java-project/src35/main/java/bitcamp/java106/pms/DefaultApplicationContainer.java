@@ -17,7 +17,7 @@ public class DefaultApplicationContainer implements ApplicationContainer {
     
     public DefaultApplicationContainer() throws Exception {
         // 스프링 IoC 컨테이너 객체 생성
-        // => 파라미터로 넘기는 값은 스피링 IoC 컨테이너 관련 설정작업을 수행하는 클래스 정보이다.
+        // => 파라미터로 넘기는 값은 스프링 IoC 컨테이너 관련 설정작업을 수행하는 클래스 정보이다.
         iocContainer = new AnnotationConfigApplicationContext(AppConfig.class);
     }
     
@@ -45,4 +45,6 @@ public class DefaultApplicationContainer implements ApplicationContainer {
     }
 }
 
+//ver 33 - Mybatis의 SqlSessionFactory 객체 생성 및 IoC 컨테이너에 등록
+//ver 32 - DataSource 객체 생성 및 IoC 컨테이너에 등록
 //ver 29 - 클래스 추가

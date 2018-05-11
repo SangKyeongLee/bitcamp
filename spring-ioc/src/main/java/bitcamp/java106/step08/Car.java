@@ -1,9 +1,9 @@
-package bitcamp.java106.step07;
+package bitcamp.java106.step08;
 
 import java.sql.Date;
 import java.util.Arrays;
 
-import bitcamp.java106.step07.Engine;
+import bitcamp.java106.step08.Engine;
 
 public class Car {
     String model;

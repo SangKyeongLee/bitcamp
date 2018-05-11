@@ -1,22 +1,24 @@
-package bitcamp.java106.step07;
+// 의존 객체 주입 자동화하기 - 필수 의존 객체와 선택 의존 객체
+package bitcamp.java106.step08;
 
 import java.sql.Date;
-import java.util.Arrays;
 
-import bitcamp.java106.step07.Engine;
+import javax.annotation.Resource;
 
-public class Car {
+import org.springframework.stereotype.Controller;
+
+@Controller
+// 의존 객체 Engine 주입 - 인스턴스 변수에  @Autowired를 붙여도 된다!
+public class Car7 {
     String model;
     String maker;
     int cc;
     boolean auto;
     Date createdDate;
-    Engine engine;
     
-    public Car() {
-        System.out.println("Car()");
-    }
-
+    // 이 애노테이션은 스프링 프레임워크가 아닌 자바에서 제공한다.
+    @Resource(name="e1")
+    Engine engine;
     
     @Override
     public String toString() {
@@ -27,6 +29,7 @@ public class Car {
     public Engine getEngine() {
         return engine;
     }
+    
     public void setEngine(Engine engine) {
         System.out.println("Car.setEngine()");
         this.engine = engine;
@@ -36,7 +39,6 @@ public class Car {
         return auto;
     }
     public void setAuto(boolean auto) {
-        System.out.println("Car.setAuto()");
         this.auto = auto;
     }
     
@@ -44,7 +46,6 @@ public class Car {
         return createdDate;
     }
     public void setCreatedDate(Date createdDate) {
-        System.out.println("Car.setCreatedDate()");
         this.createdDate = createdDate;
     }
     
@@ -52,7 +53,6 @@ public class Car {
         return model;
     }
     public void setModel(String model) {
-        System.out.println("Car.setModel()");
         this.model = model;
     }
     
@@ -60,7 +60,6 @@ public class Car {
         return maker;
     }
     public void setMaker(String maker) {
-        System.out.println("Car.setMaker()");
         this.maker = maker;
     }
     
@@ -68,7 +67,6 @@ public class Car {
         return cc;
     }
     public void setCc(int cc) {
-        System.out.println("Car.setCc()");
         this.cc = cc;
     }
     

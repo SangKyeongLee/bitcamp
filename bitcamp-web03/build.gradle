@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+
+    id 'application'
+
+    id 'war'
+
+    id 'eclipse-wtp'
+}
+
+// Define the main class for the application
+
+dependencies {
+    compile 'com.google.guava:guava:23.0'
+
+
+
+    testCompile 'junit:junit:4.12'
+}
+
+repositories {
+
+    jcenter()
+}

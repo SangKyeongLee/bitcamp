@@ -12,16 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import bitcamp.java106.pms.dao.BoardDao;
 import bitcamp.java106.pms.domain.Board;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
-@SuppressWarnings("serial")
 @WebServlet("/board/add")
 public class BoardAddServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     
     BoardDao boardDao;
-
+    
     @Override
     public void init() throws ServletException {
         // 스프링 IoC 컨테이너에서 서블릿 객체를 관리하는 것이 아니기 때문에
@@ -35,18 +33,18 @@ public class BoardAddServlet extends HttpServlet {
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
         
-        // 클라이언트가 보낸 데이터가 어떤 문자표를 사용해서 작성한지 알아야만
-        // String 객체(UTF-16)로 값을 꺼낼 수 있다.
+        // 클라이언트가 보낸 데이터가 어떤 문자표를 사용해서 작성한지 알아야만 
+        // String 객체(UTF-16)로 값을 꺼낼 수 있다. 
         request.setCharacterEncoding("UTF-8");
         
         Board board = new Board();
         board.setTitle(request.getParameter("title"));
         board.setContent(request.getParameter("content"));
         board.setCreatedDate(new Date(System.currentTimeMillis()));
-
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
+        
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
@@ -54,9 +52,11 @@ public class BoardAddServlet extends HttpServlet {
         
         // 지정된 시간이 경과하면 특정 서블릿을 요청하도록 태그를 삽입!
         // => 웹브라우저는 meta 태그의 내용대로 동작한다.
+        //    content='경과시간(초);url=요청할URL'
+        //
         out.println("<meta http-equiv='Refresh' content='1;url=list'>");
         
-        out.println("<title>게시물 등록 결과</title>");
+        out.println("<title>게시물 등록</title>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>게시물 등록 결과</h1>");
@@ -73,6 +73,15 @@ public class BoardAddServlet extends HttpServlet {
 
 }
 
-// ver 37 - BoardAddController 클래스를 서블릿으로 변경 
-//          출력 결과를 HTML로 변경
-//          자동 Refresh 태그 추가
+//ver 37 - BoardAddController 클래스를 서블릿으로 변경
+//         출력 결과를 HTML로 변경
+//         자동 Refresh 태그 추가
+//ver 31 - JDBC API가 적용된 DAO 사용
+//ver 28 - 네트워크 버전으로 변경
+//ver 26 - BoardController에서 add() 메서드를 추출하여 클래스로 정의. 
+
+
+
+
+
+

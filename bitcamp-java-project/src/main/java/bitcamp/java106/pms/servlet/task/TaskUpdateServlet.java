@@ -23,47 +23,52 @@ import bitcamp.java106.pms.servlet.InitServlet;
 @SuppressWarnings("serial")
 @WebServlet("/task/update")
 public class TaskUpdateServlet extends HttpServlet {
-    
+
     TeamDao teamDao;
     TaskDao taskDao;
     MemberDao memberDao;
     TeamMemberDao teamMemberDao;
-    
+
     @Override
     public void init() throws ServletException {
         teamDao = InitServlet.getApplicationContext().getBean(TeamDao.class);
         taskDao = InitServlet.getApplicationContext().getBean(TaskDao.class);
-        teamMemberDao = InitServlet.getApplicationContext().getBean(TeamMemberDao.class);
         memberDao = InitServlet.getApplicationContext().getBean(MemberDao.class);
+        teamMemberDao = InitServlet.getApplicationContext().getBean(TeamMemberDao.class);
     }
-    
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    protected void doPost(
+            HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
+        String teamName = request.getParameter("teamName");
         
-        Task task = new Task()
-                .setNo(Integer.parseInt(request.getParameter("no")))
-                .setTitle(request.getParameter("title"))
-                .setStartDate(Date.valueOf(request.getParameter("startDate")))
-                .setEndDate(Date.valueOf(request.getParameter("endDate")))
-                .setTeam(new Team().setName(request.getParameter("teamName")))
-                .setWorker(new Member().setId(request.getParameter("memberId")));
-        
-        response.setContentType("text/html; charset=utf-8");
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
-        //out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-        out.println("<title>작업 정보 변경</title>");
+        out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n",
+                teamName);
+        out.println("<title>작업 변경</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h1>작업정보 변경 결과</h1>");
-        
+        out.printf("<h1>'%s'팀의 작업 변경</h1>\n", teamName);
+
         try {
+            Task task = new Task()
+                    .setNo(Integer.parseInt(request.getParameter("no")))
+                    .setTitle(request.getParameter("title"))
+                    .setStartDate(Date.valueOf(request.getParameter("startDate")))
+                    .setEndDate(Date.valueOf(request.getParameter("endDate")))
+                    .setState(Integer.parseInt(request.getParameter("state")))
+                    .setTeam(new Team().setName(request.getParameter("teamName")))
+                    .setWorker(new Member().setId(request.getParameter("memberId")));
+
             int count = taskDao.update(task);
             if (count == 0) {
                 out.println("<p>해당 작업이 없습니다.</p>");
@@ -80,7 +85,6 @@ public class TaskUpdateServlet extends HttpServlet {
 
 }
 
-//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TaskController에서 update() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

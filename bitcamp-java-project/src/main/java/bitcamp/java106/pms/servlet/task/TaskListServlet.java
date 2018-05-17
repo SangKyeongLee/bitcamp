@@ -13,20 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import bitcamp.java106.pms.dao.TaskDao;
 import bitcamp.java106.pms.dao.TeamDao;
+import bitcamp.java106.pms.dao.TeamMemberDao;
 import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.server.ServerRequest;
 import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
-
 @SuppressWarnings("serial")
 @WebServlet("/task/list")
 public class TaskListServlet extends HttpServlet {
-    
+
     TeamDao teamDao;
     TaskDao taskDao;
-    
+
     @Override
     public void init() throws ServletException {
         teamDao = InitServlet.getApplicationContext().getBean(TeamDao.class);
@@ -34,10 +34,14 @@ public class TaskListServlet extends HttpServlet {
     }
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(
+            HttpServletRequest request, 
+            HttpServletResponse response) throws ServletException, IOException {
+        
+        request.setCharacterEncoding("UTF-8");
         String teamName = request.getParameter("teamName");
-        response.setContentType("text/html; charset=utf-8");
+
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
         out.println("<!DOCTYPE html>");
@@ -47,39 +51,39 @@ public class TaskListServlet extends HttpServlet {
         out.println("<title>작업 목록</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h1>작업 목록</h1>");
+        out.printf("<h1>'%s'의 작업 목록</h1>", teamName);
         
         try {
+
             Team team = teamDao.selectOne(teamName);
             if (team == null) {
-                out.printf("<p>'%s' 팀은 존재하지 않습니다.\n</p>",
-                        teamName);
-                out.println("<a href='../index.html'>index.html로 돌아가기</a>");
-                return;
+                throw new Exception(teamName + " 팀은 존재하지 않습니다.\n");
             }
             List<Task> list = taskDao.selectList(team.getName());
-            out.println("<p><a href='form.html'>작업자 추가</a></p>");
+            
+            out.printf("<p><a href='add?teamName=%s'>새 작업 등록</a></p>",teamName);
             out.println("<table border='1'>");
             out.println("<tr>");
-            out.println("   <th>번호</th><th>작업명</th><th>시작일</th>"
-                    +      "<th>종료일</th><th>작업자</th>");
+            out.println("    <th>번호</th><th>작업명</th><th>기간</th><th>작업자</th>");
             out.println("</tr>");
             
             for (Task task : list) {
                 out.println("<tr>");
-                out.printf("    <td><a href='view?no=%d'>%d</a></td><td>%s</td>"
-                        +      "<td>%s</td>,<td>%s</td>,<td>%s</td>\n", 
-                        task.getNo(), task.getNo(), task.getTitle(), 
-                        task.getStartDate(), task.getEndDate(),
+                out.printf("    <td>%d</td>", task.getNo());
+                out.printf("    <td><a href='view?no=%d'>%s</a></td>",
+                        task.getNo(), 
+                        task.getTitle());
+                out.printf("    <td>%s ~ %s</td>", 
+                        task.getStartDate(),
+                        task.getEndDate());
+                out.printf("    <td>%s</td>\n",
                         (task.getWorker() == null) ? 
                                 "-" : task.getWorker().getId());
                 out.println("</tr>");
             }
             out.println("</table>");
-            out.println("<a href='../index.html'>index.html로 돌아가기</a>");
         } catch (Exception e) {
-            out.println("<p>목록 가져오기 실패!</p>");
-            out.println("<a href='../index.html'>index.html로 돌아가기</a>");
+            out.printf("<p>%s</p>\n",e.getMessage());
             e.printStackTrace(out);
         }
         out.println("</body>");
@@ -88,7 +92,6 @@ public class TaskListServlet extends HttpServlet {
 
 }
 
-//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TaskController에서 list() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

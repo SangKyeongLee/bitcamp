@@ -5,6 +5,11 @@
 
 <mapper namespace="bitcamp.java106.pms.dao.TeamMemberDao">
 
+    <resultMap type="member" id="memberMap">
+        <id column="mid" property="id"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
 	<select id="selectList" 
 	        resultType="String" parameterType="map">
 		select mid 
@@ -12,6 +17,14 @@
 		where tnm=#{teamName}
 		<!-- limit #{startIndex}, #{pageSize} -->
 	</select>
+	
+	<select id="selectListWithEmail" 
+            resultMap="memberMap" parameterType="String">
+        select tm.mid, m.email 
+        from pms2_team_member tm inner join pms2_member m on tm.mid=m.mid
+        where tnm=#{teamName}
+        <!-- limit #{startIndex}, #{pageSize} -->
+    </select>
 
 	<insert id="insert" parameterType="Board" useGeneratedKeys="true"
 		keyColumn="bno" keyProperty="no">
@@ -28,9 +41,10 @@
 	<delete id="delete" parameterType="map">
 	    delete from pms2_team_member 
 	    where tnm=#{teamName} 
-	    and mid=#{memberId}
+	    <if test="memberId != null">
+	       and mid=#{memberId}
+	    </if>
 	</delete>
-
 </mapper>
 
 

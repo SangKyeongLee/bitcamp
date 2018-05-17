@@ -112,7 +112,7 @@ ALTER TABLE pms2_task
 -- 팀회원
 CREATE TABLE pms2_team_member (
     tnm VARCHAR(100) NOT NULL COMMENT '이름', -- 이름
-    mid VARCHAR(20)  NOT NULL COMMENT '아이디' -- 아이디
+    mid VARCHAR(20) NULL COMMENT '아이디' -- 아이디
 )
 COMMENT '팀회원';
 

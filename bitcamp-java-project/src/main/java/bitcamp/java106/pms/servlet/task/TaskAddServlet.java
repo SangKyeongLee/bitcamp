@@ -3,6 +3,7 @@ package bitcamp.java106.pms.servlet.task;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.util.List;
 
@@ -106,30 +107,14 @@ public class TaskAddServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-
         Task task = new Task();
-        task.setTitle(request.getParameter("title"));
-        task.setStartDate(Date.valueOf(request.getParameter("startDate")));
-        task.setEndDate(Date.valueOf(request.getParameter("endDate")));
-        task.setTeam(new Team().setName(request.getParameter("teamName")));
-        task.setWorker(new Member().setId(request.getParameter("memberId")));
-        
-
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n",
-                task.getTeam().getName());
-        out.println("<title>작업 등록</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>작업 등록 결과</h1>");
 
         try {
+            task.setTitle(request.getParameter("title"));
+            task.setStartDate(Date.valueOf(request.getParameter("startDate")));
+            task.setEndDate(Date.valueOf(request.getParameter("endDate")));
+            task.setTeam(new Team().setName(request.getParameter("teamName")));
+            task.setWorker(new Member().setId(request.getParameter("memberId")));
             Team team = teamDao.selectOne(task.getTeam().getName());
             if (team == null) {
                 throw new Exception(task.getTeam().getName() + " 팀은 존재하지 않습니다.\n");
@@ -143,14 +128,30 @@ public class TaskAddServlet extends HttpServlet {
             }
 
             taskDao.insert(task);
-            out.println("<p>등록 성공!</p>");
+            
+            response.sendRedirect("list?teamName="+URLEncoder.encode(task.getTeam().getName(), "UTF-8"));
         } catch (Exception e) {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<meta charset='UTF-8'>");
+            out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n",
+                    task.getTeam().getName());
+            out.println("<title>작업 등록</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>작업 등록 결과</h1>");
             out.printf("<p>%s<p>",e.getMessage());
+            out.println("<pre>");
+            out.println("</pre>");
             e.printStackTrace();
+            out.println("</body>");
+            out.println("</html>");
         }
 
-        out.println("</body>");
-        out.println("</html>");
     }
 
 }

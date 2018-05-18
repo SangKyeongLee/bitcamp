@@ -3,6 +3,7 @@ package bitcamp.java106.pms.servlet.teammember;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,11 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.dao.TeamMemberDao;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
@@ -36,35 +34,37 @@ public class TeamMemberDeleteServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         
         request.setCharacterEncoding("UTF-8");
+        
         String teamName = request.getParameter("teamName");
         String memberId = request.getParameter("memberId");
-
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.printf("<meta http-equiv='Refresh' content='1;url=../view?name=%s'>",teamName);
-        out.println("<title>팀 회원 삭제</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>팀 회원 삭제 결과</h1>");
 
         try {
             int count = teamMemberDao.delete(teamName, memberId);
             if (count == 0) {
-                out.println("<p>해당 팀원이 존재하지 않습니다.</p>");
-            } else {
-                out.println("<p>팀에서 회원을 삭제하였습니다.</p>");
+                throw new Exception("해당 팀원이 존재하지 않습니다.");
             }
+            response.sendRedirect("../view?name="+
+                    URLEncoder.encode(teamName, "UTF-8"));
         } catch (Exception e) {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<meta charset='UTF-8'>");
+            out.printf("<meta http-equiv='Refresh' content='1;url=../view?name=%s'>",teamName);
+            out.println("<title>팀 회원 삭제</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>팀 회원 삭제 결과</h1>");
             out.println("<p>삭제 실패!</p>");
+            out.println("<pre>");
             e.printStackTrace(out);
+            out.println("</pre>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 }
 

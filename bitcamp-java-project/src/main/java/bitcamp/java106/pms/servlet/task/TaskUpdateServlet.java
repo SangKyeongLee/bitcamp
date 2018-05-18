@@ -44,20 +44,6 @@ public class TaskUpdateServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         String teamName = request.getParameter("teamName");
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n",
-                teamName);
-        out.println("<title>작업 변경</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.printf("<h1>'%s'팀의 작업 변경</h1>\n", teamName);
 
         try {
             Task task = new Task()
@@ -71,16 +57,31 @@ public class TaskUpdateServlet extends HttpServlet {
 
             int count = taskDao.update(task);
             if (count == 0) {
-                out.println("<p>해당 작업이 없습니다.</p>");
-            } else {
-                out.println("<p>변경하였습니다.</p>");
-            }
+                throw new Exception("<p>해당 작업이 없습니다.</p>");
+            } 
+            
+            response.sendRedirect("list?teamName="+teamName);
         } catch (Exception e) {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<meta charset='UTF-8'>");
+            out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n",
+                    teamName);
+            out.println("<title>작업 변경</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.printf("<h1>'%s'팀의 작업 변경</h1>\n", teamName);
             out.println("<p>변경 실패!</p>");
+            out.println("<pre>");
             e.printStackTrace(out);
+            out.println("</pre>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 
 }

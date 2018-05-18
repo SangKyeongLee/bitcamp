@@ -29,40 +29,41 @@ public class ClassroomUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        System.out.println(request.getParameter("no"));
-        Classroom classroom = new Classroom();
-        classroom.setNo(Integer.parseInt(request.getParameter("no")));
-        classroom.setTitle(request.getParameter("title"));
-        classroom.setStartDate(Date.valueOf(request.getParameter("startDate")));
-        classroom.setEndDate(Date.valueOf(request.getParameter("endDate")));
-        classroom.setRoom(request.getParameter("room"));
-        
-        response.setContentType("text/html; charset=utf-8");
-        PrintWriter out = response.getWriter();
-        
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-        out.println("<title>수업 정보 변경</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>수업정보 변경 결과</h1>");
         
         try {
+            System.out.println(request.getParameter("no"));
+            Classroom classroom = new Classroom();
+            classroom.setNo(Integer.parseInt(request.getParameter("no")));
+            classroom.setTitle(request.getParameter("title"));
+            classroom.setStartDate(Date.valueOf(request.getParameter("startDate")));
+            classroom.setEndDate(Date.valueOf(request.getParameter("endDate")));
+            classroom.setRoom(request.getParameter("room"));
             int count = classroomDao.update(classroom);
             if (count == 0) {
-                out.println("<p>유효하지 않은 게시물 번호입니다.</p>");
-            } else {
-                out.println("<p>변경하였습니다.</p>");
+                throw new Exception("해당 강의가 존재하지 않습니다.");
             }
+            
+            response.sendRedirect("list");
         } catch (Exception e) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<meta charset='UTF-8'>");
+            out.println("<meta http-equiv='Refresh' content='1;url=list'>");
+            out.println("<title>강의 정보 변경</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>강의정보 변경 결과</h1>");
             out.println("<p>변경 실패!</p>");
+            out.println("<pre>");
             e.printStackTrace(out);
+            out.println("</pre>");
+            out.println("</body>"); 
+            out.println("</html>");
         }
-        out.println("</body>"); 
-        out.println("</html>");
     }
 
 }

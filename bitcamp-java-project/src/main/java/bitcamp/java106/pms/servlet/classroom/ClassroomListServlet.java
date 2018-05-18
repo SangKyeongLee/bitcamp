@@ -29,7 +29,6 @@ public class ClassroomListServlet extends HttpServlet {
     protected void doGet(
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
-
         
         response.setContentType("text/html; charset=utf-8");
         PrintWriter out = response.getWriter();
@@ -38,26 +37,26 @@ public class ClassroomListServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
-        out.println("<title>수업 목록</title>");
+        out.println("<title>강의 목록</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h1>수업 목록</h1>");
+        out.println("<h1>강의 목록</h1>");
         
         try {
             List<Classroom> list = classroomDao.selectList();
             
-            out.println("<p><a href='form.html'>새 수업 추가</a></p>");
+            out.println("<p><a href='form.html'>새 강의 등록</a></p>");
             out.println("<table border='1'>");
             out.println("<tr>");
-            out.println("    <th>번호</th><th>수업명</th><th>시작일</th><th>종료일</th><th>강의실</th><th>삭제</th><th>변경</th>");
+            out.println("    <th>번호</th><th>강의명</th><th>기간</th><th>강의실</th><th>삭제</th><th>변경</th>");
             out.println("</tr>");
             for (Classroom classroom : list) {
                 out.println("<form action='update' method='post'>");
                 out.println("<tr>");
                 out.printf("    <td><input type='text' name='no' value=%d readonly></td>"
                         + "<td><input type='text' name='title' value=%s readonly></td>"
-                        + "<td><input type='date' name='startDate' value=%s></td>"
-                        + "<td><input type='date' name='endDate' value=%s></td>"
+                        + "<td><input type='date' name='startDate' value=%s> ~ "
+                        + "<input type='date' name='endDate' value=%s></td>"
                         + "<td><input type='text' name='room' value=%s></td>"
                         + "<td><a href='delete?no=%d'>삭제</a></td>"
                         + "<td><button>변경</button></td>\n",
@@ -71,7 +70,7 @@ public class ClassroomListServlet extends HttpServlet {
                 out.println("</form>");
             }
             out.println("</table>");
-            
+            out.println("<a href='../'>첫화면으로 돌아가기</a>");
         } catch (Exception e) {
             out.println("<p>목록 가져오기 실패!</p>");
             e.printStackTrace(out);

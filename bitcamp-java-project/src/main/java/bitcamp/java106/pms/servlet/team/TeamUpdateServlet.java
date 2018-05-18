@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.domain.Team;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
@@ -33,38 +31,41 @@ public class TeamUpdateServlet extends HttpServlet {
             throws ServletException, IOException {
         
         request.setCharacterEncoding("UTF-8");
-        Team team = new Team();
-        team.setName(request.getParameter("name"));
-        team.setDescription(request.getParameter("description"));
-        team.setMaxQty(Integer.parseInt(request.getParameter("maxQty")));
-        team.setStartDate(Date.valueOf(request.getParameter("startDate")));
-        team.setEndDate(Date.valueOf(request.getParameter("endDate")));
-
-        response.setContentType("text/html; charset=utf-8");
-        PrintWriter out = response.getWriter();
         
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-        out.println("<title>회원 정보 변경</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>회원정보 변경 결과</h1>");
         try {
+            Team team = new Team();
+            team.setName(request.getParameter("name"));
+            team.setDescription(request.getParameter("description"));
+            team.setMaxQty(Integer.parseInt(request.getParameter("maxQty")));
+            team.setStartDate(Date.valueOf(request.getParameter("startDate")));
+            team.setEndDate(Date.valueOf(request.getParameter("endDate")));
+            
             int count = teamDao.update(team);
             if (count == 0) {
-                out.println("<p>해당 팀을 찾을 수 없습니다.</p>");
-            } else {
-                out.println("<p>변경하였습니다.</p>");
+                throw new Exception("해당 팀을 찾을 수 없습니다.");
             }
+            
+            response.sendRedirect("list");
         } catch (Exception e) {
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<meta charset='UTF-8'>");
+            out.println("<meta http-equiv='Refresh' content='1;url=list'>");
+            out.println("<title>회원 정보 변경</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>회원정보 변경 결과</h1>");
             out.println("<p>변경 실패!</p>");
+            out.println("<pre>");
             e.printStackTrace(out);
+            out.println("</pre>");
+            out.println("</body>"); 
+            out.println("</html>"); 
         }  
-        out.println("</body>"); 
-        out.println("</html>"); 
     }
 }
 

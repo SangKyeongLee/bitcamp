@@ -24,8 +24,14 @@
 
 	<select id="selectOne" resultMap="MemberMap" parameterType="Member">
 		select mid,email from pms2_member 
-		where mid=#{id}
+		where mid=#{value}
 	</select>
+	
+	<select id="selectOneWithPassword" parameterType="map" resultMap="MemberMap">
+        select mid,email 
+        from pms2_member 
+        where mid=#{id} and pwd=sha2(#{password},224)
+    </select>
 
 	<update id="update" parameterType="Member">
 		update pms2_member set 

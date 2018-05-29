@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,43 +35,19 @@ public class MemberListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html; charset=utf-8");
-        PrintWriter out = response.getWriter();
 
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.println("<title>회원 목록</title>");
-        out.println("</head>");
-        out.println("<body>");
-        
-        request.getRequestDispatcher("/header").include(request, response);
-        
-        out.println("<h1>회원 목록</h1>");
         try {
             List<Member> list = memberDao.selectList();
             
-            out.println("<p><a href='form.html'>새 회원 추가</a></p>");
-            out.println("<table border='1'>");
-            out.println("<tr>");
-            out.println("    <th>회원명</th><th>이메일</th>");
-            out.println("</tr>");
-            for (Member member : list) {
-                out.println("<tr>");
-                out.printf("    <td><a href='view?id=%s'>%s</a></td><td>%s</td>\n",
-                    member.getId(), 
-                    member.getId(),
-                    member.getEmail()); 
-                out.println("</tr>");
-            }
-            out.println("</table>");
+            request.setAttribute("list", list);
+            response.setContentType("text/html; charset=utf-8");
+            request.getRequestDispatcher("/member/list.jsp").include(request, response);
+            
         } catch (Exception e) {
-            out.println("<p>목록 가져오기 실패!</p>");
-            e.printStackTrace(out);
+            request.setAttribute("error", e);
+            request.setAttribute("title", "회원 목록 조회 실패");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 }
 

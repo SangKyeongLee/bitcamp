@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,46 +37,18 @@ public class TeamListServlet extends HttpServlet {
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
         
-        response.setContentType("text/html; charset=utf-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.println("<title>팀 목록</title>");
-        out.println("</head>");
-        out.println("<body>");
-        
-        request.getRequestDispatcher("/header").include(request, response);
-        
-        out.println("<h1>팀 목록</h1>");
-        
         try {
             List<Team> list = teamDao.selectList();
             
-            out.println("<p><a href='form.html'>새 팀 등록</a></p>");
-            out.println("<table border='1'>");
-            out.println("<tr>");
-            out.println("    <th>팀명</th><th>인원</th><th>활동기간</th>");
-            out.println("</tr>");
-            for (Team team : list) {
-                out.println("<tr>");
-                out.printf("<td><a href='view?name=%s'>%s</a></td><td>%d</td><td>%s ~ %s</td>\n", 
-                        team.getName(),
-                        team.getName(), 
-                        team.getMaxQty(), 
-                        team.getStartDate(), 
-                        team.getEndDate());
-                out.println("</tr>");
-            }
-            out.println("</table>");
+            request.setAttribute("list", list);
+            response.setContentType("text/html; charset=utf-8");
+            request.getRequestDispatcher("/team/list.jsp").include(request, response);
+            
         } catch (Exception e) {
-            out.println("목록 가져오기 실패!");
-            e.printStackTrace(out);
+            request.setAttribute("error", e);
+            request.setAttribute("title", "팀 목록 조회 실패");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 }
 

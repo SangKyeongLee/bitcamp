@@ -49,24 +49,9 @@ public class TeamMemberDeleteServlet extends HttpServlet {
             response.sendRedirect("../view?name="+
                     URLEncoder.encode(teamName, "UTF-8"));
         } catch (Exception e) {
-            response.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<meta charset='UTF-8'>");
-            out.printf("<meta http-equiv='Refresh' content='1;url=../view?name=%s'>",teamName);
-            out.println("<title>팀 회원 삭제</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>팀 회원 삭제 결과</h1>");
-            out.println("<p>삭제 실패!</p>");
-            out.println("<pre>");
-            e.printStackTrace(out);
-            out.println("</pre>");
-            out.println("</body>");
-            out.println("</html>");
+            request.setAttribute("error", e);
+            request.setAttribute("title", "팀회원 삭제 실패");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
 }

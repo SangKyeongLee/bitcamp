@@ -1,8 +1,6 @@
-// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.servlet.task;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
@@ -20,59 +18,55 @@ import bitcamp.java106.pms.support.WebApplicationContextUtils;
 @SuppressWarnings("serial")
 @WebServlet("/task/delete")
 public class TaskDeleteServlet extends HttpServlet {
-
+    
     TeamDao teamDao;
     TaskDao taskDao;
-
+    
     @Override
     public void init() throws ServletException {
         ApplicationContext iocContainer = 
                 WebApplicationContextUtils.getWebApplicationContext(
-                this.getServletContext());
+                        this.getServletContext()); 
         teamDao = iocContainer.getBean(TeamDao.class);
         taskDao = iocContainer.getBean(TaskDao.class);
     }
-
+    
     @Override
     protected void doGet(
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
         
-        int no = Integer.parseInt(request.getParameter("no"));
         String teamName = request.getParameter("teamName");
-
+        
         try {
+            int no = Integer.parseInt(request.getParameter("no"));
             int count = taskDao.delete(no);
             if (count == 0) {
                 throw new Exception("해당 작업이 존재하지 않습니다.");
             }
+            response.sendRedirect("list?teamName=" + 
+                   URLEncoder.encode(teamName, "UTF-8"));
+            // 응답 헤더의 값으로 한글을 포함할 때는 
+            // 서블릿 컨테이너가 자동으로 URL 인코딩 하지 않는다.
+            // 위와 같이 개발자가 직접 URL 인코딩 해야 한다.
             
-            response.sendRedirect("list?teamName="+URLEncoder.encode(teamName, "UTF-8"));
+            
         } catch (Exception e) {
-            response.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<meta charset='UTF-8'>");
-            out.printf("<meta http-equiv='Refresh' content='1;url=list?teamName=%s'>\n", teamName);
-            out.println("<title>작업 삭제</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>작업 삭제 결과</h1>\n");
-            out.println("<p>삭제 실패!</p>");
-            out.println("<p>잠시 후 다시 시도해주세요. 계속 오류 발생 시<br></p>");
-            out.println("<p>담당자(내선: 120)에게 연락주세요.</p>");
-            out.println("<pre>");
-            e.printStackTrace(out);
-            out.println("</pre>");
-            out.println("</body>");
-            out.println("</html>");
+            request.setAttribute("error", e);
+            request.setAttribute("title", "작업 삭제 실패!");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
+    
 }
 
+//ver 42 - JSP 적용
+//ver 40 - CharacterEncodingFilter 필터 적용.
+//         request.setCharacterEncoding("UTF-8") 제거
+//ver 39 - forward 적용
+//ver 38 - redirect 적용
+//ver 37 - 컨트롤러를 서블릿으로 변경
+//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TaskController에서 delete() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

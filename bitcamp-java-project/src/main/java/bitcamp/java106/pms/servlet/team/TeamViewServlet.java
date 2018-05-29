@@ -1,8 +1,7 @@
-// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.servlet.team;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 
 import bitcamp.java106.pms.dao.TeamDao;
+import bitcamp.java106.pms.dao.TeamMemberDao;
+import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.support.WebApplicationContextUtils;
 
@@ -22,77 +23,48 @@ import bitcamp.java106.pms.support.WebApplicationContextUtils;
 public class TeamViewServlet extends HttpServlet {
 
     TeamDao teamDao;
+    TeamMemberDao teamMemberDao;
     
     @Override
     public void init() throws ServletException {
         ApplicationContext iocContainer = 
                 WebApplicationContextUtils.getWebApplicationContext(
-                this.getServletContext());
+                        this.getServletContext()); 
         teamDao = iocContainer.getBean(TeamDao.class);
+        teamMemberDao = iocContainer.getBean(TeamMemberDao.class);
     }
     
     @Override
     protected void doGet(
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
-        
         String name = request.getParameter("name");
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        out.println("<!DOCTYPE html>");
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<meta charset='UTF-8'>");
-        out.println("<title>팀 정보 보기</title>");
-        out.println("</head>");
-        out.println("<body>");
-        
-        request.getRequestDispatcher("/header").include(request, response);
-        
-        out.println("<h1>팀 정보 보기</h1>");
+
         try {
-            Team team = teamDao.selectOne(name);
-    
+            List<Member> members = teamMemberDao.selectListWithEmail(name);
+            Team team = teamDao.selectOneWithMembers(name);
             if (team == null) {
-                out.println("해당 이름의 팀이 없습니다.");
-            } 
-            out.println("<form action='update' method='post'>");
-            out.println("<table border='1'>");
-            out.printf("<tr><th>팀명</th><td><input type='text' name='name' value='%s' readonly></td></tr>\n",team.getName());
-            out.printf("<tr><th>설명</th><td><textarea name='description' rows='10' cols='60'>%s</textarea></td></tr>\n",team.getDescription());
-            out.printf("<tr><th>최대인원</th><td><input type='number' name='maxQty' value='%d'></td></tr>\n",team.getMaxQty());
-            out.printf("<tr>"
-                    + "<th>기간</th>"
-                    + "<td><input type='date' name='startDate' value='%s'> ~"
-                    + "<input type='date' name='endDate' value='%s'></td>"
-                    + "</tr>\n", team.getStartDate(), team.getEndDate());
-            out.println("</table>");
-            out.println("<p>");
-            out.println("<a href='list'>목록</a>");
-            out.println("<button>변경</button>");
-            out.printf("<a href='delete?name=%s'>삭제</a>\n", name);
-            out.printf("<a href='../task/list?teamName=%s'>작업목록</a>\n", name);
-            out.println("</p>");
-            out.println("</form>");
+                throw new Exception("유효하지 않은 팀입니다.");
+            }
             
-            RequestDispatcher 요청배달자 = request.getRequestDispatcher("/team/member/list");
-            요청배달자.include(request, response);
-            
+            request.setAttribute("list", members);
+            request.setAttribute("team", team);
+            response.setContentType("text/html;charset=UTF-8");
+            request.getRequestDispatcher("/team/view.jsp").include(request, response);
+            //request.getRequestDispatcher("/team/member/list").include(request, response);
+               
         } catch (Exception e) {
-            RequestDispatcher 요청배달자 = request.getRequestDispatcher("/error");
             request.setAttribute("error", e);
-            request.setAttribute("title", "팀 상세조회 실패!");
-            // 다른 서블릿으로 실행을 위임할 때,
-            // 이전까지 버퍼로 출력한 데이터는 버린다.
-            요청배달자.forward(request, response);
+            request.setAttribute("title", "팀 상세보기 실패");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        out.println("</body>");
-        out.println("</html>"); 
     }
 }
 
+//ver 40 - CharacterEncodingFilter 필터 적용.
+//         request.setCharacterEncoding("UTF-8") 제거
+//ver 39 - forward 적용
+//ver 37 - 컨트롤러를 서블릿으로 변경
 //ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TeamController에서 view() 메서드를 추출하여 클래스로 정의.

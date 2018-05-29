@@ -46,24 +46,9 @@ public class TeamAddServlet extends HttpServlet {
             response.sendRedirect("list");
             
         } catch (Exception e) {
-            response.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<meta charset='UTF-8'>");
-            out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-            out.println("<title>팀 등록</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>팀 등록 결과</h1>");
-            out.println("<p>등록 실패!</p>");
-            out.println("<pre>");
-            e.printStackTrace(out);
-            out.println("</pre>");
-            out.println("</body>");
-            out.println("</html>");
+            request.setAttribute("error", e);
+            request.setAttribute("title", "팀 등록 실패");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
 }

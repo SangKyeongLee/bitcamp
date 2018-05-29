@@ -11,6 +11,10 @@
 		<result column="max_qty" property="maxQty" />
 		<result column="sdt" property="startDate" />
 		<result column="edt" property="endDate" />
+		<collection property="members" ofType="Member">
+		  <id column="mid" property="id"/>
+		  <result column="email" property="email"/>
+		</collection>
 	</resultMap>
 
 	<select id="selectList" resultMap="TeamMap" parameterType="map">
@@ -28,6 +32,21 @@
 		select name, dscrt, max_qty, sdt, edt from pms2_team 
 		where name=#{name}
 	</select>
+	
+	<select id="selectOneWithMembers" resultMap="TeamMap" parameterType="Team">
+        select 
+            t.name, 
+            t.dscrt, 
+            t.max_qty, 
+            t.sdt, 
+            t.edt,
+            tm.mid,
+            m.email
+        from pms2_team t 
+            left outer join pms2_team_member tm on t.name=tm.tnm
+            left outer join pms2_member m on tm.mid=m.mid
+        where t.name=#{value}
+    </select>
 
 	<update id="update" parameterType="Team">
 		update pms2_team set 

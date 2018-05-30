@@ -10,7 +10,7 @@
 <body>
 	<jsp:include page="/header.jsp" />
 	<h1>작업 보기(MVC + JSP 전용 태그 + EL + JSTL)</h1>
-	<form action='update' method='post'>
+	<form action='update.do' method='post'>
 		<input type='hidden' name='no' value='${param.no}'>
 		<table border='1'>
 			<tr>
@@ -50,7 +50,7 @@
 			</tr>
 		</table>
 		<button>변경</button>
-		<a href='delete?no=${param.no}&teamName=${task.team.name}'>삭제</a>
+		<a href='delete.do?no=${param.no}&teamName=${task.team.name}'>삭제</a>
 	</form>
 </body>
 </html>

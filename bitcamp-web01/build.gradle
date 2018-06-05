@@ -37,7 +37,8 @@ dependencies {
     // - 배치에는 포함하지 않는다.
     testCompile 'junit:junit:4.12'
     
-    
+    // 로컬 .jar 파일 등록
+    compile fileTree(dir: 'libs', include:['*.jar'])
 }
 
 

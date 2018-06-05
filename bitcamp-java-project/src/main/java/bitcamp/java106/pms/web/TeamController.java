@@ -1,13 +1,10 @@
 package bitcamp.java106.pms.web;
 
-import java.beans.PropertyEditorSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,6 +29,10 @@ public class TeamController {
         this.teamMemberDao = teamMemberDao;
         this.taskDao = taskDao;
     }
+
+    @RequestMapping("/form")
+    public void form() {
+    }
     
     @RequestMapping("/add")
     public String add(Team team) throws Exception {
@@ -55,11 +56,10 @@ public class TeamController {
     }
     
     @RequestMapping("/list")
-    public String list(Map<String,Object> map) throws Exception {
+    public void list(Map<String,Object> map) throws Exception {
         
         List<Team> list = teamDao.selectList();
         map.put("list", list);
-        return "/team/list.jsp";
     }
     
     @RequestMapping("/update")
@@ -73,7 +73,7 @@ public class TeamController {
     }
     
     @RequestMapping("/view")
-    public String view(
+    public void view(
             @RequestParam("name") String name,
             Map<String,Object> map) throws Exception {
         
@@ -82,7 +82,6 @@ public class TeamController {
             throw new Exception("유효하지 않은 팀입니다.");
         }
         map.put("team", team);
-        return "/team/view.jsp";
     }
     // GrobalBindingInitializer에 등록했기 때문에 이 클래스에서는 제외한다.
     /*

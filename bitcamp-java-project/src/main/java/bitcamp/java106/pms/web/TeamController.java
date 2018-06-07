@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -72,9 +73,9 @@ public class TeamController {
         return "redirect:list.do";
     }
     
-    @RequestMapping("/view")
-    public void view(
-            @RequestParam("name") String name,
+    @RequestMapping("{name}")
+    public String view(
+            @PathVariable("name") String name,
             Map<String,Object> map) throws Exception {
         
         Team team = teamDao.selectOneWithMembers(name);
@@ -82,6 +83,7 @@ public class TeamController {
             throw new Exception("유효하지 않은 팀입니다.");
         }
         map.put("team", team);
+        return "team/view";
     }
     // GrobalBindingInitializer에 등록했기 때문에 이 클래스에서는 제외한다.
     /*

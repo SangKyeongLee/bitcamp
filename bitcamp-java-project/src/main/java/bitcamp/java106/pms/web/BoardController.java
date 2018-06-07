@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,7 +38,7 @@ public class BoardController {
     public String add(Board board) throws Exception {
         
         boardDao.insert(board);
-        return "redirect:list.do";
+        return "redirect:list";
     }
     
     @RequestMapping("/delete")
@@ -47,7 +48,7 @@ public class BoardController {
         if (count == 0) {
             throw new Exception("해당 게시물이 없습니다.");
         }
-        return "redirect:list.do";
+        return "redirect:list";
     }
     
     @RequestMapping("/list")
@@ -64,12 +65,12 @@ public class BoardController {
         if (count == 0) {
             throw new Exception("해당 게시물이 존재하지 않습니다.");
         } 
-        return "redirect:list.do";
+        return "redirect:list";
     }
     
-    @RequestMapping("/view")
-    public void view(
-            @RequestParam("no") int no, 
+    @RequestMapping("/view/{no}")
+    public String view(
+            @PathVariable int no, 
             Map<String,Object> map) throws Exception {
         
         Board board = boardDao.selectOne(no);
@@ -77,6 +78,7 @@ public class BoardController {
             throw new Exception("유효하지 않은 게시물 번호입니다.");
         }
         map.put("board", board);
+        return "board/view";
     }
 
 }

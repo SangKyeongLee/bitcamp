@@ -12,7 +12,7 @@ contentType="text/html; charset=UTF-8"
 <body>
 
 <h1>팀 등록</h1>
-<form action="add.do" method="post">
+<form action="add" method="post">
 이름: <input type="text" name="name"><br>
 내용: <textarea name="description" rows="10" cols="60"></textarea><br>
 최대인원: <input type="number" name="maxQty"><br>

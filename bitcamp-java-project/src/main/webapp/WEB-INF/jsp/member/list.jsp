@@ -11,14 +11,14 @@ contentType="text/html; charset=UTF-8"
 <body>
 <jsp:include page="../header.jsp"/>
 <h1>회원 목록</h1>
-<p><a href='form.html'>새 회원 추가</a></p>
+<p><a href='form'>새 회원 추가</a></p>
 <table border='1'>
 <tr>
     <th>회원명</th><th>이메일</th>
 </tr>
 <c:forEach items="${list}" var="member">
 <tr>
-    <td><a href='view.do?id=${member.id}'>${member.id}</a></td>
+    <td><a href='view/${member.id}'>${member.id}</a></td>
     <td>${member.email}</td>
 </tr>
 </c:forEach>

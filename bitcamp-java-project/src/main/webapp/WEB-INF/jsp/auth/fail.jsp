@@ -6,7 +6,7 @@ contentType="text/html; charset=UTF-8"
 
 <head>
 <meta charset='UTF-8'>
-<meta http-equiv='Refresh' content='1;url=<%=request.getContextPath()%>/auth/form.jsp'>
+<meta http-equiv='Refresh' content='1;url=<%=request.getContextPath()%>/app/auth/form'>
 <title>로그인 실패</title>
 </head>
 

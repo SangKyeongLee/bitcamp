@@ -9,9 +9,9 @@
 <title>작업 등록</title>
 </head>
 <body>
-<h1>'${param.teamName}' 팀의 작업 등록</h1>
-<form action='add.do' method='post'>
-<input type='hidden' name='teamName' value='${param.teamName}'>
+<h1>'${teamName}' 팀의 작업 등록</h1>
+<form action='../task/add' method='post'>
+<input type='hidden' name='teamName' value='${teamName}'>
 <table border='1'>
 <tr>
     <th>작업명</th><td><input type='text' name='title'></td>
@@ -27,7 +27,7 @@
     <td>
         <select name='memberId'>
             <option value=''>--선택 안함--</option>
-<c:forEach items="${members}" var="member">            
+<c:forEach items="${members}" var="member">
             <option>${member.id}</option>
 </c:forEach>
         </select>

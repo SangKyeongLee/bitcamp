@@ -11,7 +11,7 @@
 <body>
 
 <h1>회원 등록</h1>
-<form action="add.do" method="post">
+<form action="add" method="post">
 아이디: <input type="text" name="id"><br>
 이메일: <input type="text" name="email"><br>
 비밀번호: <input type="password" name="password"><br>

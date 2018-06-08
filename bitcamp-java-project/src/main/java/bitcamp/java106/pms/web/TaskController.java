@@ -1,11 +1,11 @@
 package bitcamp.java106.pms.web;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,8 +93,10 @@ public class TaskController {
         return "/task/form";
     }
     
-    @RequestMapping("list")
+    @RequestMapping("list{page}")
     public String list(
+            @MatrixVariable(defaultValue="1") int pageNo,
+            @MatrixVariable(defaultValue="3") int pageSize,
             @PathVariable("teamName") String teamName,
             Map<String,Object> map) throws Exception {
         
@@ -102,7 +104,12 @@ public class TaskController {
         if (team == null) {
             throw new Exception(teamName + " 팀은 존재하지 않습니다.");
         }
-        List<Task> list = taskDao.selectList(team.getName());
+        
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("startRowNo", (pageNo -1) * pageSize);
+        params.put("pageSize", pageSize);
+        params.put("teamName", team.getName());
+        List<Task> list = taskDao.selectList(params);
         map.put("list", list);
         map.put("teamName", teamName);
         return  "/task/list";

@@ -20,7 +20,7 @@
 	<select id="selectList" resultMap="TeamMap" parameterType="map">
 		select name,max_qty,sdt,edt 
 		from pms2_team
-		<!-- limit #{startIndex}, #{pageSize} -->
+		limit #{startRowNo}, #{pageSize}
 	</select>
 
 	<insert id="insert" parameterType="Team">

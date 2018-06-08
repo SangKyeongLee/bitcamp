@@ -14,7 +14,7 @@
 	<select id="selectList" resultMap="MemberMap" parameterType="map">
 		select mid,email 
 		from pms2_member
-		<!-- limit #{startIndex}, #{pageSize} -->
+		limit #{startRowNo}, #{pageSize}
 	</select>
 
 	<insert id="insert" parameterType="Member">

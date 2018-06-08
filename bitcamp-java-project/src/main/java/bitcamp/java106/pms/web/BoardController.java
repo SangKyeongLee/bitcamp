@@ -58,7 +58,7 @@ public class BoardController {
             @MatrixVariable(defaultValue="1") int pageNo,
             @MatrixVariable(defaultValue="3") int pageSize,
             Map<String,Object> map) throws Exception {        
-            
+        
         HashMap<String, Object> params = new HashMap<>();
         params.put("startRowNo", (pageNo - 1) * pageSize);
         params.put("pageSize", pageSize);

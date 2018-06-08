@@ -108,7 +108,8 @@ public class TaskController {
         HashMap<String,Object> params = new HashMap<>();
         params.put("startRowNo", (pageNo -1) * pageSize);
         params.put("pageSize", pageSize);
-        params.put("teamName", team.getName());
+        params.put("teamName", teamName);
+        
         List<Task> list = taskDao.selectList(params);
         map.put("list", list);
         map.put("teamName", teamName);

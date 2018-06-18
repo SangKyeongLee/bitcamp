@@ -1,7 +1,7 @@
 <%@ page language="java" 
-contentType="text/html; charset=UTF-8"
+    contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>    
 <c:if test="${header.referer != null and !header.referer.endsWith('/auth/login')}">
     <c:set scope="session" var="refererUrl" value="${header.referer}"/> 
 </c:if>
@@ -9,7 +9,7 @@ contentType="text/html; charset=UTF-8"
 <html>
 <head>
 <meta charset='UTF-8'>
-<title>로그인(MVC + EL + JSTL)</title>
+<title>로그인</title>
 </head>
 <body>
 <h1>로그인</h1>
@@ -20,10 +20,9 @@ contentType="text/html; charset=UTF-8"
 <tr><th>암호</th>
     <td><input type='password' name='password'></td></tr>
 </table>
-<p><input type='checkbox' name='saveId'>아이디 저장</p>
+<p><input type='checkbox' name='saveId'> 아이디 저장</p>
 <button>로그인</button>
 </form>
 </body>
 </html>
-
     

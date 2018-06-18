@@ -1,79 +1,72 @@
 package bitcamp.java106.pms.web;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.domain.Member;
+import bitcamp.java106.pms.service.MemberService;
 
-@Component
+@Controller
 @RequestMapping("/member")
 public class MemberController {
 
-    MemberDao memberDao;
+    MemberService memberService;
     
-    public MemberController(MemberDao memberDao) {
-        this.memberDao = memberDao;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
-
-    @RequestMapping("/form")
+    
+    @RequestMapping("form")
     public void form() {
     }
     
-    @RequestMapping("/add")
+    @RequestMapping("add")
     public String add(Member member) throws Exception {
           
-        memberDao.insert(member);
+        memberService.add(member);
         return "redirect:list";
     }
     
-    @RequestMapping("/delete")
+    @RequestMapping("delete")
     public String delete(@RequestParam("id") String id) throws Exception {
         
-        int count = memberDao.delete(id);
+        int count = memberService.delete(id);
         if (count == 0) {
             throw new Exception("해당 회원이 없습니다.");
         }
         return "redirect:list";
     }
     
-    @RequestMapping("/list{page}")
+    @RequestMapping("list{page}")
     public void list(
             @MatrixVariable(defaultValue="1") int pageNo,
             @MatrixVariable(defaultValue="3") int pageSize,
-            Map<String, Object> map) throws Exception {
+            Map<String,Object> map) throws Exception {        
         
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("startRowNo", (pageNo - 1) * pageSize);
-        params.put("pageSize", pageSize);
-        
-        List<Member> list = memberDao.selectList(params);
-        map.put("list", list);
+        map.put("list", memberService.list(pageNo, pageSize));
     }
     
-    @RequestMapping("/update")
+    @RequestMapping("update")
     public String update(Member member) throws Exception {
         
-        int count = memberDao.update(member);
+        int count = memberService.update(member);
         if (count == 0) {
             throw new Exception("해당 회원이 존재하지 않습니다.");
         }
         return "redirect:list";
     }
     
-    @RequestMapping("/view/{id}")
+    @RequestMapping("{id}")
     public String view(
-            @PathVariable("id") String id,
+            @PathVariable String id,
             Map<String,Object> map) throws Exception {
 
-        Member member = memberDao.selectOne(id);
+        Member member = memberService.get(id);
         if (member == null) {
             throw new Exception("유효하지 않은 멤버 아이디입니다.");
         }
@@ -82,6 +75,10 @@ public class MemberController {
     }
 }
 
+//ver 52 - InternalResourceViewResolver 적용
+//         *.do 대신 /app/* 을 기준으로 URL 변경
+//         페이지 관련 파라미터에 matrix variable 적용 
+//ver 51 - Spring WebMVC 적용
 //ver 49 - 요청 핸들러의 파라미터 값 자동으로 주입받기
 //ver 48 - CRUD 기능을 한 클래스에 합치기
 //ver 47 - 애노테이션을 적용하여 요청 핸들러 다루기

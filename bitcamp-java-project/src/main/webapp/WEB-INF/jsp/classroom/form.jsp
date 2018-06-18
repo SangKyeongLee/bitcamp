@@ -1,4 +1,3 @@
-<%@page import="bitcamp.java106.pms.domain.Classroom"%>
 <%@ page language="java" 
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -9,7 +8,7 @@
 <title>강의 등록</title>
 </head>
 <body>
-
+<jsp:include page="../header.jsp"/>
 <h1>강의 등록</h1>
 <form action='add' method='post'>
 <table border='1'>

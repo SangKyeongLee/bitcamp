@@ -12,7 +12,7 @@
 <jsp:include page="../header.jsp"/>
 <h1>작업 보기</h1>
 <form action='update' method='post'>
-<input type='hidden' name='no' value='${no}'>
+<input type='hidden' name='no' value='${task.no}'>
 <table border='1'>
 <tr>
     <th>팀명</th>
@@ -49,7 +49,7 @@
 </table>
 <a href='list'>목록</a>
 <button>변경</button> 
-<a href='delete?no=${no}'>삭제</a>
+<a href='delete?no=${task.no}'>삭제</a>
 </form>
 </body>
 </html>

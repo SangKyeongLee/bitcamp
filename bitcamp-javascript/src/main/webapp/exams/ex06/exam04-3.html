@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex06</title>
+<style type="text/css">
+body, div {
+    border: 1px solid red;
+    padding: 30px;
+}
+button {
+    padding: 30px;
+}
+</style>
+
+</head>
+<body>
+<h1>이벤트 - bubble 대신 capture와 target 단계에서 호출되는 리스너 등록하기</h1>
+<div id="d1">d1
+    <div id="d2">d2
+        <button id="btn1">버튼1</button>
+        <button id="btn2">버튼2</button>
+    </div>
+</div>
+
+<script>
+"use strict"
+
+// 이벤트가 발생하면 capture-target-bubble 단계로 진행한다.
+// target 단계에서 bubble 단계로 진행하는 막지 않으면
+// 부모 태그에 등록된 리스너까지 호출되는 문제가 발생한다.
+//
+// 방법1: Event.stopPropagation()을 호출하라!
+// => 이벤트 bubbling을 막는다.
+// => target에 등록된 함수는 모두 호출된다.
+
+document.getElementById("btn1").addEventListener("click", function(e) {
+	console.log("버튼 1...1");
+	e.stopPropagation();
+});
+document.getElementById("btn1").addEventListener("click", function(e) {
+    console.log("버튼 1...2");
+});
+document.getElementById("btn1").addEventListener("click", function(e) {
+    console.log("버튼 1...3");
+});
+
+//방법2: Event.stopImmediatePropagation()을 호출하라!
+//=> 이벤트 bubbling을 막는다.
+//=> target에 등록된 함수라도 즉시 현 함수에서 실행을 마감한다.
+//
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼 2...1");
+    e.stopImmediatePropagation();
+});
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼 2...2");
+});
+document.getElementById("btn2").addEventListener("click", function(e) {
+    console.log("버튼 2...3");
+});
+
+document.getElementById("d2").addEventListener("click", function(e) {
+    console.log("d2...");
+});
+
+document.getElementById("d1").addEventListener("click", function(e) {
+    console.log("d1...");
+});
+
+document.body.addEventListener("click", function(e) {
+    console.log("body...");
+});
+
+// 정리!
+// => addEventListener(이벤트, 리스너, false) : target, bubble 단계일 때 리스너가 호출된다.)
+//      - 세 번째 파라미터가 없으면 기본이 false이다.
+// => addEventListener(이벤트, 리스너, true) : capture, target 단계일 때 리스너가 호출된다.)
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

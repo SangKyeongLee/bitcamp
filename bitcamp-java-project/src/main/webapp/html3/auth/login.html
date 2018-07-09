@@ -17,7 +17,7 @@
 <button id="loginBtn" type="button">로그인</button>
 </form>
 
-<script src="../js/bitcamp.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 $("#loginBtn").click(() => {
 	var data = {
@@ -28,11 +28,13 @@ $("#loginBtn").click(() => {
 		data.saveId = "true";
 	}
 	$.post("../../json/auth/login", data, (result) => {
+		console.log("xxxxxxxxxxxxxxx");
 		if (result.state == "success")
 			location.href = "../board/list.html";
 		else
 			window.alert("로그인 실패!");
 	}, "json");
+	console.log("1111111111111111");
 });
 /*  */
 </script>

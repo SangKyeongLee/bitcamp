@@ -9,7 +9,7 @@
 <form>
 <table border='1'>
 <tr><th>아이디</th>
-    <td><input type='text' id="fId"></td></tr>
+    <td><input type='text' id='fId'></td></tr>
 <tr><th>암호</th>
     <td><input type='password' id='fPassword'></td></tr>
 </table>
@@ -28,16 +28,17 @@ $("#loginBtn").click(() => {
 		data.saveId = "true";
 	}
 	$.post("../../json/auth/login", data, (result) => {
-		console.log("xxxxxxxxxxxxxxx");
 		if (result.state == "success")
 			location.href = "../board/list.html";
-		else
+		else 
 			window.alert("로그인 실패!");
 	}, "json");
-	console.log("1111111111111111");
 });
-/*  */
+
 </script>
+
+
 
 </body>
 </html>
+    

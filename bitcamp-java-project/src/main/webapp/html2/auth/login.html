@@ -9,7 +9,7 @@
 <form>
 <table border='1'>
 <tr><th>아이디</th>
-    <td><input type='text' id="fId"></td></tr>
+    <td><input type='text' id='fId'></td></tr>
 <tr><th>암호</th>
     <td><input type='password' id='fPassword'></td></tr>
 </table>
@@ -30,12 +30,15 @@ $("#loginBtn").click(() => {
 	$.post("../../json/auth/login", data, (result) => {
 		if (result.state == "success")
 			location.href = "../board/list.html";
-		else
+		else 
 			window.alert("로그인 실패!");
 	}, "json");
 });
-/*  */
+
 </script>
+
+
 
 </body>
 </html>
+    

@@ -53,14 +53,14 @@ public class AuthController {
         }
         response.addCookie(cookie);
         
-        HashMap<String, Object> result = new HashMap<>();
+        HashMap<String,Object> result = new HashMap<>();
         
         if (memberService.isExist(id, password)) { // 로그인 성공!
             session.setAttribute("loginUser", memberService.get(id));
             result.put("state", "success");
         } else { // 로그인 실패!
             session.invalidate();
-            result.put("state","fail");
+            result.put("state", "fail");
         }
         return result;
     }

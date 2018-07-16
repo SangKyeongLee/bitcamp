@@ -33,7 +33,7 @@
 
 
 <script src="../js/bitcamp.min.js"></script>
-<!-- <script src="../header.js"></script> -->
+<script src="../header.js"></script>
 <script>
 
 if (location.href.split("?").length > 1) {
@@ -59,7 +59,7 @@ if (location.href.split("?").length > 1) {
 		});
 	});
 	
-    $("#delBtn").click (() => {
+    $("#delBtn").click(() => {
         if (window.confirm("삭제하시겠습니까?") == false) 
         	return;
         
@@ -72,13 +72,13 @@ if (location.href.split("?").length > 1) {
     var tags = $(".detail-view");
     tags.css("display", "none");
     
-    $("#addBtn").click (() => {
+    $("#addBtn").click(() => {
     	$.post("../../json/board/add", {
     		title: $(fTitle).val(),
-            content: $(fContent).val(),
-        }, () => {
-            location.href = "list.html";
-        });
+            content: $(fContent).val()
+    	}, () => {
+    		location.href = "list.html";
+    	});
     });
 }
 

@@ -59,16 +59,16 @@ var jQuery = function(param) {
     };
     
     tags.is = function(selector) {
-    	if (tags[0].querySelectorAll(selector).length > 0)
+    	if (tags[0].querySelectorAll(selector).length > 0) 
     		return true;
-    	else
+    	else 
     		return false;
     };
     
     return tags;
 };
 
-jQuery.ajax = function (url, settings) {
+jQuery.ajax = function(url, settings) {
 	// AJAX 실행 정보를 초기화시킨다.
 	if (settings == undefined || settings == null) {
 		settings = {};
@@ -112,7 +112,7 @@ jQuery.ajax = function (url, settings) {
 		}
 		xhr.open(settings.method, url, true);
 		xhr.send();
-	}
+	}	
 };
 
 jQuery.toQueryString = function(obj) {
@@ -146,7 +146,7 @@ jQuery.getJSON = function(url, p1, p2) {
 	}
 };
 
-jQuery.post = function (url, p1, p2, p3) {
+jQuery.post = function(url, p1, p2, p3) {
 	var settings = {
 		method: "POST"
 	};
@@ -174,7 +174,7 @@ jQuery.post = function (url, p1, p2, p3) {
 	jQuery.ajax(url, settings);
 };
 
-jQuery.get = function (url, p1, p2, p3) {
+jQuery.get = function(url, p1, p2, p3) {
 	var settings = {
 		method: "GET"
 	};
@@ -201,7 +201,6 @@ jQuery.get = function (url, p1, p2, p3) {
 	
 	jQuery.ajax(url, settings);
 };
-
 
 var $ = jQuery;
 
